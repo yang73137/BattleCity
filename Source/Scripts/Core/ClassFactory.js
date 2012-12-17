@@ -55,7 +55,10 @@
             common.extend(true, this.methods, methods);
         }
 
-        newClass.methods.isInstancceOf = function (type) {
+        newClass.methods.isInstanceOf = function (type) {
+            if (!type) {
+                return false;
+            }
             var base = this.class;
             var isInstance = false;
             while (base) {

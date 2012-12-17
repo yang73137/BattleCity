@@ -1,0 +1,115 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title></title>
+        <script type="text/javascript" src="../../Scripts/Core/jquery-1.8.3.js"></script>
+        <script type="text/javascript" src="../../Scripts/Core/common.js"></script>
+        <script type="text/javascript" src="../../Scripts/Core/ClassFactory.js"></script>
+        <script type="text/javascript" src="../../Scripts/Domain/Domains.js"></script>
+        <script type="text/javascript" language="javascript">
+
+            var ImpactManager = ClassFactory.createClass("ImpactManager", null, {
+                impactCommands: [],
+                addCommand: function (command) {
+                    this.impactCommands.push(command);
+                },
+                removeCommand: function (command) {
+                    var index = 0;
+                    for (; index < this.impactCommands.length; index++) {
+                        if (this.impactCommands.index == command) {
+                            break;
+                        }
+                    }
+                    this.impactCommands.splice(index, 1);
+                },
+                handle: function (obj1, obj2) {
+                    for (var i = 0; i < this.impactCommands.length; i++) {
+                        var command = this.impactCommands[i];
+                        if ((obj1.isInstanceOf(command.type1) && obj2.isInstanceOf(command.type2)) || (obj1.isInstanceOf(command.type2) && obj2.isInstanceOf(command.type1))) {
+                            command.handle(obj1, obj2);
+                            break;
+                        }
+                    }
+                }
+            });
+
+            var ImpactCommand = ClassFactory.createClass("ImpactCommand", null, {
+                handle: common.noop
+            });
+
+            var MissileTankImpactCommand = ClassFactory.createClass("MissileTankImpactCommand", ImpactCommand, {
+                type1: Missile,
+                type2: Tank,
+                handle: function (obj1, obj2) {
+                    var missile = obj1.isInstanceOf(Missile) ? obj1 : obj2;
+                    var tank = obj1.isInstanceOf(Missile) ? obj2 : obj1;
+
+                    var tankOfMissile = missile.tank;
+
+                    if (tankOfMissile.type == tank.type) {
+                        return;
+                    }
+
+                    if (tankOfMissile.type == common.tankType.player) {
+                        tank.deleted = true;
+                        missile.deleted = true;
+                        alert(1);
+                        return;
+                    }
+
+                    if (tankOfMissile.type == common.tankType.enemy) {
+                        tank.deleted = true;
+                        missile.deleted = true;
+                        alert(2);
+                        return;
+                    }
+                }
+            });
+
+            var impactManager = ImpactManager.createNew();
+            var impactCommand = MissileTankImpactCommand.createNew();
+            impactManager.addCommand(impactCommand);
+
+            var player = Tank.createNew({
+                type: common.tankType.player,
+                direction: common.direction.up,
+                imageDictionary: { up: "Images/p1tankU.png", down: "Images/p1tankD.png", left: "Images/p1tankL.png", right: "Images/p1tankR.png" },
+                x: 260,
+                y: 570,
+                width: 30,
+                height: 30,
+                speed: 4
+            });
+
+            var enemy = Tank.createNew({
+                type: common.tankType.enemy,
+                direction: common.direction.down,
+                imageDictionary: { up: "Images/enemy1U.png", down: "Images/enemy1D.png", left: "Images/enemy1L.png", right: "Images/enemy1R.png" },
+                x: 0,
+                y: 0,
+                width: 30,
+                height: 30,
+                speed: 4
+            });
+
+            var missile1 = Missile.createNew({
+                image: "Images/tankmissile.png"
+            });
+
+            var missile2 = Missile.createNew({
+                image: "Images/enemymissile.png"
+            });
+
+            player.setMissile(missile1);
+            enemy.setMissile(missile2);
+
+            impactManager.handle(player, enemy.missile);
+            impactManager.handle(enemy, player.missile);
+
+
+        </script>
+	</head>
+	<body>
+	
+	</body>
+</html>

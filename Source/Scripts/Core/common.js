@@ -1,6 +1,7 @@
 ﻿var common = {
     direction: { up: "up", down: "down", left: "left", right: "right" },
     className: { player: "player", enemy1: "enemy1", enemy2: "enemy2" },
+    tankType: { player: "player", enemy: "enemy" },
     extend: function () {
         var options, name, src, copy, copyIsArray, clone,
 		        target = arguments[0] || {},

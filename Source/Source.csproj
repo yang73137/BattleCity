@@ -43,9 +43,68 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\enemy1D.png" />
+    <Content Include="Images\enemy1L.png" />
+    <Content Include="Images\enemy1R.png" />
+    <Content Include="Images\enemy1U.png" />
+    <Content Include="Images\enemy2D.png" />
+    <Content Include="Images\enemy2L.png" />
+    <Content Include="Images\enemy2R.png" />
+    <Content Include="Images\enemy2U.png" />
+    <Content Include="Images\enemy3D.png" />
+    <Content Include="Images\enemy3L.png" />
+    <Content Include="Images\enemy3R.png" />
+    <Content Include="Images\enemy3U.png" />
+    <Content Include="Images\enemymissile.png" />
+    <Content Include="Images\grass.png" />
+    <Content Include="Images\mintank.png" />
+    <Content Include="Images\over.png" />
+    <Content Include="Images\p1tankD.png" />
+    <Content Include="Images\p1tankL.png" />
+    <Content Include="Images\p1tankR.png" />
+    <Content Include="Images\p1tankU.png" />
+    <Content Include="Images\p2tankD.png" />
+    <Content Include="Images\p2tankL.png" />
+    <Content Include="Images\p2tankR.png" />
+    <Content Include="Images\p2tankU.png" />
+    <Content Include="Images\selecttank.png" />
+    <Content Include="Images\star.png" />
+    <Content Include="Images\steel.png" />
+    <Content Include="Images\steels.png" />
+    <Content Include="Images\symbol.png" />
+    <Content Include="Images\tankmissile.png" />
+    <Content Include="Images\timer.png" />
+    <Content Include="Images\tugai.net.20101117134209.png" />
+    <Content Include="Images\tugai.net.20101117144551.png" />
+    <Content Include="Images\tugai.net.20101117144625.png" />
+    <Content Include="Images\tugai.net.20101117145147.png" />
+    <Content Include="Images\tugai.net.20101117235303.png" />
+    <Content Include="Images\tugai.net.20101117235357.png" />
+    <Content Include="Images\tugai.net.20101117235418.png" />
+    <Content Include="Images\tugai.net.20101117235441.png" />
+    <Content Include="Images\tugai.net.20101117235754.png" />
+    <Content Include="Images\tugai.net.20101117235819.png" />
+    <Content Include="Images\tugai.net.20101117235843.png" />
+    <Content Include="Images\tugai.net.20101117235923.png" />
+    <Content Include="Images\tugai.net.20101117235941.png" />
+    <Content Include="Images\tugai.net.20101118000029.png" />
+    <Content Include="Images\tugai.net.20101118000048.png" />
+    <Content Include="Images\tugai.net.20101118000114.png" />
+    <Content Include="Images\wall.png" />
+    <Content Include="Images\walls.png" />
+    <Content Include="Images\water.png" />
+    <Content Include="Scripts\Core\ClassFactory.js" />
+    <Content Include="Scripts\Core\common.js" />
+    <Content Include="Scripts\Core\jquery-1.8.3.js" />
+    <Content Include="Scripts\Domain\Domains.js" />
+    <Content Include="Scripts\Domain\Graph.js" />
+    <Content Include="Tank.html" />
+    <Content Include="UnitTest\ImpactTest\ImpactManager.htm" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
