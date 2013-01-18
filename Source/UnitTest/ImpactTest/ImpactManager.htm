@@ -53,16 +53,23 @@
                     if (tankOfMissile.type == common.tankType.player) {
                         tank.deleted = true;
                         missile.deleted = true;
-                        alert(1);
                         return;
                     }
 
                     if (tankOfMissile.type == common.tankType.enemy) {
                         tank.deleted = true;
                         missile.deleted = true;
-                        alert(2);
                         return;
                     }
+                }
+            });
+
+            var TankTankImpactCommand = ClassFactory.createClass("TankTankCommand", ImpactCommand, {
+                type1: Tank,
+                type2: Tank,
+                handle: function(obj1, obj2) {
+                    obj1.stop();
+                    obj2.stop();
                 }
             });
 
@@ -71,25 +78,11 @@
             impactManager.addCommand(impactCommand);
 
             var player = Tank.createNew({
-                type: common.tankType.player,
-                direction: common.direction.up,
-                imageDictionary: { up: "Images/p1tankU.png", down: "Images/p1tankD.png", left: "Images/p1tankL.png", right: "Images/p1tankR.png" },
-                x: 260,
-                y: 570,
-                width: 30,
-                height: 30,
-                speed: 4
+                type: common.tankType.player
             });
 
             var enemy = Tank.createNew({
-                type: common.tankType.enemy,
-                direction: common.direction.down,
-                imageDictionary: { up: "Images/enemy1U.png", down: "Images/enemy1D.png", left: "Images/enemy1L.png", right: "Images/enemy1R.png" },
-                x: 0,
-                y: 0,
-                width: 30,
-                height: 30,
-                speed: 4
+                type: common.tankType.enemy
             });
 
             var missile1 = Missile.createNew({

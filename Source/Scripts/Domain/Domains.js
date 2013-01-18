@@ -153,14 +153,14 @@ var Fixed = ClassFactory.createClass("Fixed", Graph, {
         var fixed = this;
         var image = new Image();
         image.src = fixed.image;
-        image.onload = function () {
+        image.onload = function() {
             for (var i = 0; i < fixed.xCount; i++) {
                 for (var j = 0; j < fixed.yCount; j++) {
                     fixed.context.drawImage(image, fixed.x + i * fixed.smallWidth, fixed.y + j * fixed.smallHeight, fixed.smallWidth, fixed.smallHeight);
                 }
             }
             image = null;
-        }
+        };
     }
 });
 
@@ -360,6 +360,12 @@ var Tank = ClassFactory.createClass("Tank", Mover, {
         var newTank = Tank.createNew();
         common.extend(true, newTank, this);
         return newTank;
+    },
+    destory: function () {
+        this.deleted = true;
+    },
+    stop: function () {
+        this.move = common.noop();
     }
 });
 

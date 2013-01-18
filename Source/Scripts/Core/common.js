@@ -65,5 +65,5 @@
         // Return the modified object
         return target;
     },
-    noop: function () { alert("Not Imp"); }
+    noop: function () { }
 };

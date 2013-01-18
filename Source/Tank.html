@@ -132,9 +132,9 @@
                     common.extend(true, this.properties, properties);
                 };
 
-                newClass.addMethods = function (methods) {
+                newClass.addMethods = function(methods) {
                     common.extend(true, this.methods, methods);
-                }
+                };
 
                 newClass.methods.isInstancceOf = function (type) {
                     var base = this.class;
@@ -310,14 +310,14 @@
                 var fixed = this;
                 var image = new Image();
                 image.src = fixed.image;
-                image.onload = function () {
+                image.onload = function() {
                     for (var i = 0; i < fixed.xCount; i++) {
                         for (var j = 0; j < fixed.yCount; j++) {
                             fixed.context.drawImage(image, fixed.x + i * fixed.smallWidth, fixed.y + j * fixed.smallHeight, fixed.smallWidth, fixed.smallHeight);
                         }
                     }
                     image = null;
-                }
+                };
             }
         });
 
@@ -458,7 +458,7 @@
                         this.y = this.y <= 0 ? 0 : this.y;
                     }
                     this.image = this.imageDictionary.up;
-                }
+                };
             },
             moveDown: function () {
                 this.move = function () {
@@ -469,7 +469,7 @@
                         this.y = (this.y + this.height >= this.stage.height) ? (this.stage.height - this.height) : this.y;
                     }
                     this.image = this.imageDictionary.down;
-                }
+                };
             },
             moveLeft: function () {
                 this.move = function () {
@@ -480,10 +480,10 @@
                         this.x = this.x <= 0 ? 0 : this.x;
                     }
                     this.image = this.imageDictionary.left;
-                }
+                };
             },
             moveRight: function () {
-                this.move = function () {
+                this.move = function() {
                     this.direction = common.direction.right;
                     var hit = this.hit();
                     if (!hit) {
@@ -491,7 +491,7 @@
                         this.x = (this.x + this.width) >= this.stage.width ? (this.stage.width - this.width) : this.x;
                     }
                     this.image = this.imageDictionary.right;
-                }
+                };
             },
             draw: function () {
                 var tank = this;
@@ -646,22 +646,6 @@
             }
         });
         var context = context;
-        var tank = Tank.createNew({
-            x: 50,
-            y: 50,
-            context: context, 
-            direction: common.direction.down,
-            imageDictionary: { up: "Images/enemy1U.png", down: "Images/enemy1D.png", left: "Images/enemy1L.png", right: "Images/enemy1R.png" },
-            width: 30,
-            height: 30,
-            speed: 4
-        });
-        tank.draw();
-        var missile = Missile.createNew({ x: 51, y: 40 });
-        var tankMissileCollider = TankMissileColliderCommand.createNew();
-        setTimeout(function () {
-            tankMissileCollider.execute(tank, missile);
-        }, 1000);
 
         var BoundaryCollideCommand = ClassFactory.createClass("BoundaryCollideCommand", ColliderCommand, {
             execute: function (collider, collidee) {
