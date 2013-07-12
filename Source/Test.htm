@@ -1,0 +1,71 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+	    <title></title>
+	    <script type="text/javascript">
+
+    	    var ClassFactory = function(base, instanceProperties, staticProperties) {
+    	        var newClass = function() {
+    	        };
+    	        newClass["[[properties]]"] = {};
+    	        newClass["[[methods]]"] = {};
+
+    	        var key;
+
+    	        for (key in base["[[properties]]"]) {
+    	            newClass["[[properties]]"][key] = base["[[properties]]"][key];
+    	        }
+
+    	        for (key in base["[[properties]]"]) {
+    	            newClass["[[methods]]"][key] = base["[[methods]]"][key];
+    	        }
+
+    	        for (key in staticProperties) {
+    	            if (staticProperties.hasOwnProperty(key)) {
+    	                newClass[key] = staticProperties[key];
+    	            }
+    	        }
+
+    	        newClass.createNew = function() {
+    	        };
+    	    };
+
+	        function extend(target, source, deep) {
+	            var key;
+	            var self = arguments.callee;
+	            
+	            if (!deep) {
+	                for (key in source) {
+	                    if (source.hasOwnProperty(key)) {
+	                        target[key] = source[key];
+	                    }
+	                }
+	                return target;
+	            }
+
+	            for (key in source) {
+	                if (source.hasOwnProperty(key)) {
+	                    var value = source[key];
+	                    if (value !== null && typeof value === "object") {
+	                        target[key] = new value.constructor();
+	                        self(target[key], value, true);
+	                    } 
+	                    else {
+	                        target[key] = value;
+	                    }
+	                }
+	            }
+
+	            return target;
+	        }
+
+	        var Person = function() {
+	        };
+
+	        var p1 = new Person();
+    	</script>
+	</head>
+	<body>
+	
+	</body>
+</html>

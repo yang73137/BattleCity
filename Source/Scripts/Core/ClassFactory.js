@@ -51,9 +51,9 @@
             common.extend(true, this.properties, properties);
         };
 
-        newClass.addMethods = function (methods) {
+        newClass.addMethods = function(methods) {
             common.extend(true, this.methods, methods);
-        }
+        };
 
         newClass.methods.isInstanceOf = function (type) {
             if (!type) {
