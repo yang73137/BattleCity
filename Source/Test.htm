@@ -4,30 +4,43 @@
 	    <title></title>
 	    <script type="text/javascript">
 
-    	    var ClassFactory = function(base, instanceProperties, staticProperties) {
-    	        var newClass = function() {
-    	        };
-    	        newClass["[[properties]]"] = {};
-    	        newClass["[[methods]]"] = {};
+    	    var ClassFactory = {
+    	        createClass: function(base, instanceProperties, staticProperties) {
 
-    	        var key;
-
-    	        for (key in base["[[properties]]"]) {
-    	            newClass["[[properties]]"][key] = base["[[properties]]"][key];
-    	        }
-
-    	        for (key in base["[[properties]]"]) {
-    	            newClass["[[methods]]"][key] = base["[[methods]]"][key];
-    	        }
-
-    	        for (key in staticProperties) {
-    	            if (staticProperties.hasOwnProperty(key)) {
-    	                newClass[key] = staticProperties[key];
+    	            if (typeof base !== "function") {
+    	                alert("base must be a function");
     	            }
-    	        }
+    	            
+    	            var newClass = new Function();
+    	            newClass["[[properties]]"] = {};
+    	            newClass["[[methods]]"] = {};
 
-    	        newClass.createNew = function() {
-    	        };
+    	            extend(newClass["[[properties]]"], base["[[properties]]"], true);
+    	            extend(newClass["[[methods]]"], base["[[methods]]"], true);
+
+    	            for (var key in instanceProperties) {
+    	                if (instanceProperties.hasOwnProperty) {
+    	                    if (instanceProperties[key].constructor === Function) {
+    	                        newClass["[[methods]]"][key] = instanceProperties[key];
+    	                    } else {
+    	                        newClass["[[properties]]"][key] = instanceProperties[key];
+    	                    }
+    	                }
+    	            }
+
+    	            extend(newClass.prototype, newClass["[[methods]]"], true);
+
+    	            extend(newClass, staticProperties, true);
+
+    	            newClass.createNew = function(parameters) {
+    	                var newInstance = new this();
+    	                extend(newInstance, this["[[properties]]"], true);
+    	                extend(newInstance, parameters, true);
+    	                return newInstance;
+    	            };
+
+    	            return newClass;
+    	        }
     	    };
 
 	        function extend(target, source, deep) {
@@ -59,10 +72,10 @@
 	            return target;
 	        }
 
-	        var Person = function() {
-	        };
+	        var Person = ClassFactory.createClass(Object, { instanceMethod: function () { alert("instanceMethod"); }, instanceFiled: "instanceFiled" }, { staticMethod: function () { alert("staticMethod"); }, staticField: "staticField" });
+	        var p1 = Person.createNew({});
+	        alert(p1.instanceFiled);
 
-	        var p1 = new Person();
     	</script>
 	</head>
 	<body>
