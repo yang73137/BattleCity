@@ -479,7 +479,7 @@ EnemyTank = ClassFactory.createClass(Tank, {
         }
 
         // 停止活动一段时间
-        if (this.stopCounter.enabled && this.this.stopCounter.countdown()) {
+        if (this.stopCounter.enabled && this.stopCounter.countdown()) {
             return;
         }
         else {
