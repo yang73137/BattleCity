@@ -226,7 +226,7 @@ GameUI = ClassFactory.createClass(UIBase, {
                     this.tanks[i].update();
                 }
 
-                if (!over && liveTanks < 5 && this.birthIndex < this.tankTypes.length) {
+                if (!over && liveTanks < 3 && this.birthIndex < this.tankTypes.length) {
                     var x = 192 / 32 * (this.birthIndex % 3);
                     var canBirth = true;
                     for (var i = 0; i < this.birthIndex; i++) {
@@ -401,7 +401,8 @@ GameUI = ClassFactory.createClass(UIBase, {
         }
     },
     moveToStage: function (stage) {
-        
+        this.player.bulletProofSprite.hide();
+        this.birthIndex = 0;
         this.stageCounter.setEnabled(true);
         this.stopCounter.setEnabled(false);
 
