@@ -226,14 +226,26 @@ GameUI = ClassFactory.createClass(UIBase, {
                     this.tanks[i].update();
                 }
 
-                if (!over && liveTanks < 3 && this.birthIndex < this.tankTypes.length) {
-                    var newTank = new EnemyTank(1);
-                    newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
-                    newTank.birth(192 * (this.birthIndex % 3), 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
-                    newTank.addToGameUI(this);
-                    this.birthIndex++;
-                    this.tanks.push(newTank);
-                    this.updateLeftTank();
+                if (!over && liveTanks < 5 && this.birthIndex < this.tankTypes.length) {
+                    var x = 192 / 32 * (this.birthIndex % 3);
+                    var canBirth = true;
+                    for (var i = 0; i < this.birthIndex; i++) {
+                        var currentTank = this.tanks[i];
+                        if ((currentTank.state == TankState.LIVE || currentTank.state == TankState.BIRTH) && currentTank.sprite.x / 32 == x && currentTank.sprite.y / 32 < 1)
+                        {
+                            canBirth = false;
+                            break;
+                        }
+                    }
+                    if (canBirth) {
+                        var newTank = new EnemyTank(1);
+                        newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
+                        newTank.birth(192 * (this.birthIndex % 3), 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
+                        newTank.addToGameUI(this);
+                        this.birthIndex++;
+                        this.tanks.push(newTank);
+                        this.updateLeftTank();
+                    }
                 }
 
                 if (this.player.life <= 0 || this.baseDestoryed) {
@@ -416,14 +428,6 @@ GameUI = ClassFactory.createClass(UIBase, {
 
         this.tanks = [];
         this.tanks.push(this.player);
-
-        for (this.birthIndex = 0; this.birthIndex < 3; this.birthIndex++) {
-            var tank = new EnemyTank(1);
-            tank.setBonus(!!(this.bonusArr[this.birthIndex]));
-            tank.birth(192 * this.birthIndex, 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
-            tank.addToGameUI(this);
-            this.tanks.push(tank);
-        }
 
         for (var i = 0; i < this.tankTypes.length; i++) {
             this.leftTankLayer.div.childNodes[i].style.display = "block";
