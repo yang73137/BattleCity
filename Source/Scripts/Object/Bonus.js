@@ -10,25 +10,24 @@
 Bonus = ClassFactory.createClass(GameObject, {
     init: function () {
         GameObject.init.call(this);
-        this.taken = true;
         this.type = -1;
         this.sprite = new Sprite(Const.IMAGE_TANK, 32, 32);
         this.sprite.setZ(Const.Z_BONUS);
 
         this.flashCounter = new Counter(8, true, true);
+        this.flashCounter.setEnabled(false);
     },
     random: function () {
-        this.type = Math.round(Math.random() * 5);
+        this.type = 5;//Math.round(Math.random() * 5);
         var x = Math.round(Math.random() * 12) * 32;
         var y = Math.round(Math.random() * 12) * 32;
         this.sprite.setPosition(x, y);
         this.sprite.setFrameSequence([121 + this.type]);
         this.sprite.moveToFrame(0);
-        this.flash = true;
-        this.taken = false;
+        this.flashCounter.setEnabled(true);
     },
     take: function () {
-        this.taken = true;
+        this.flashCounter.setEnabled(false);
         this.sprite.hide();
         switch (this.type) {
             case BonusType.BaseProof:
@@ -51,19 +50,13 @@ Bonus = ClassFactory.createClass(GameObject, {
                 }
                 break;
             case BonusType.Timer:
-                for (var i = 1; i < this.gameUI.tanks.length; i++) {
-                    if (this.gameUI.tanks[i].state == TankState.LIVE) {
-                        this.gameUI.tanks[i].stop(300);
-                    }
-                }
+                this.gameUI.stop(600);
                 break;
         }
     },
     update: function () {
-        if (!this.taken) {
-            if (!this.flashCounter.countdown()) {
-                this.sprite.setVisible(!this.sprite.visible);
-            }
+        if (this.flashCounter.enabled && !this.flashCounter.countdown()) {
+            this.sprite.setVisible(!this.sprite.visible);
         }
     },
     addToGameUI: function (gameUI) {

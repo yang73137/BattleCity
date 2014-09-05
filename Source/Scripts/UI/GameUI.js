@@ -1,7 +1,17 @@
-﻿GameUI = ClassFactory.createClass(UIBase, {
+﻿GameState = {
+    None: 0,
+    SelectStage: 1,
+    ShowStage: 2,
+    Gaming: 3,
+    Calculating: 4,
+    GameOver: 5,
+};
+
+GameUI = ClassFactory.createClass(UIBase, {
     init: function () {
         UIBase.init.call(this);
 
+        this.state = GameState.None;
         this.stage = 1;
         this.maxStage = 35;
 
@@ -16,7 +26,7 @@
         this.tanks = [];
 
         // 坦克类型数组
-        this.tankTypes = [3, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 3];
+        this.tankTypes = [3, 3, 3, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 3];
         this.bonusArr = [0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0];
 
         // 新建坦克索引
@@ -26,12 +36,12 @@
         // 动态块
         this.animateBlocks = [];
 
-        this.endCounter = new Counter(60, false, false);
+        this.endCounter = new Counter(120, false, true);
 
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setBackground("RGB(102,102,102)");
         this.setPosition(0, 0);
-       
+
 
         // 游戏区域
         this.gameArea = new Layer();
@@ -111,114 +121,136 @@
         this.stageLayer.append(this.stageLabel);
 
         this.append(this.stageLayer);
-        this.stageShowCounter = new Counter(90, false, true);
+        this.stageCounter = new Counter(120, false, true);
 
-        this.bonus = new Bonus();     
+        this.bonus = new Bonus();
 
         this.setPosition(0, 0);
+        
+        this.stopCounter = new Counter(0, false, true);
     },
     onEnter: function () {
         this.player.life = 3;
         this.birthIndex = 0;
-
+        this.state = GameState.SelectStage;
+        this.setStage(this.stage);
         this.show();
-        this.moveToStage(28);
     },
     onLevel: function () {
         this.hide();
     },
     onUpdate: function () {
 
-        if (this.stageShowCounter.enabled && this.stageShowCounter.countdown()) {
-            this.stageLayer.show();
-            return true;
-        }
-        else {
-            this.stageLayer.hide();
-            this.gameArea.show();
-            this.stageShowCounter.setEnabled(false);
-        }
+        switch (this.state) {
+            case GameState.SelectStage:
+                this.stageLayer.show();
+                if (Input.isPressed(InputAction.GAME_A)) {
+                    this.setStage(++this.stage);
+                }
+                if (Input.isPressed(InputAction.START)) {
+                    this.stageLayer.hide();
+                    this.moveToStage(this.stage);
+                    this.state = GameState.Gaming;
+                }
+                return true;
+            case GameState.ShowStage:
+                this.stageLayer.show();
+                if (!this.stageCounter.countdown()) {
+                    this.stageLayer.hide();
+                    this.stageCounter.setEnabled(false);
+                    this.state = GameState.Gaming;
+                }
+                return true;
+            case GameState.Gaming:
+                
+                this.gameArea.show();
+                this.bonus.update();
+                
+                if (this.stopCounter.enabled && !this.stopCounter.countdown()) {
+                    this.stopCounter.setEnabled(false);
+                }
+                
+                for (var i = 0; i < this.animateBlocks.length; i++) {
+                    this.animateBlocks[i].update();
+                }
 
-        if (!this.bonus.taken) {
-            this.bonus.update();
-        }
+                if (this.baseProofCounter.enabled) {
+                    if (!this.baseProofCounter.countdown()) {
+                        this.baseProofCounter.setEnabled(false);
+                        this.clearBaseProof();
+                    }
+                }
 
-        if (this.baseProofCounter.enabled) {
-            if (!this.baseProofCounter.countdown()) {
-                this.baseProofCounter.setEnabled(false);
-                this.clearBaseProof();
-            }
-        }
+                if (Input.isPressed(17) && Input.isPressed(77)) {
+                    this.cheat();
+                }
+                
+                if (Input.isPressed(InputAction.START)) {
+                    this.pause = !this.pause;
+                }
+                
+                if (this.pause) {
+                    this.pauseLabel.show();
+                    return true;
+                }
+                else {
+                    this.pauseLabel.hide();
+                }
 
-        if (Input.isPressed(17) && Input.isPressed(77)) {
-            this.cheat();
-        }
-        if (Input.isPressed(13)) {
-            this.pause = !this.pause;
-        }
-        if (this.pause) {
-            this.pauseLabel.show();
-            return true;
-        }
-        else {
-            this.pauseLabel.hide();
-        }
+                if (this.baseDestoryed && !this.bomb.update()) {
+                    if (!this.bombCounter.countdown()) {
+                        return false;
+                    }
+                }
 
-        if (this.baseDestoryed && !this.bomb.update()) {
-            if (!this.bombCounter.countdown()) {
-                return false;
-            }
+                if (this.player.state == TankState.NONE) {
+                    if (this.player.life > 1) {
+                        this.player.birth(128, 384, 0, Const.DIRECTION_UP);
+                    }
+
+                    this.player.life--;
+
+                    if (this.player.life >= 1) {
+                        this.lifeLabel.setText(this.player.life - 1);
+                    }
+                }
+
+                var over = this.birthIndex == this.tankTypes.length;
+                var liveTanks = 0;
+                for (var i = 0; i < this.tanks.length; i++) {
+                    var tank = this.tanks[i];
+                    if (tank != this.player && tank.state != TankState.NONE) {
+                        over = false;
+                        liveTanks++;
+                    }
+                    this.tanks[i].update();
+                }
+
+                if (!over && liveTanks < 3 && this.birthIndex < this.tankTypes.length) {
+                    var newTank = new EnemyTank(1);
+                    newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
+                    newTank.birth(192 * (this.birthIndex % 3), 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
+                    newTank.addToGameUI(this);
+                    this.birthIndex++;
+                    this.tanks.push(newTank);
+                    this.updateLeftTank();
+                }
+
+                if (this.player.life <= 0 || this.baseDestoryed) {
+                    if (!this.endCounter.countdown()) {
+                        this.player.life = 3;
+                        this.player.setType(0);
+                        return false;
+                    }
+                }
+
+                if (over && !this.endCounter.countdown()) {
+                    this.moveToStage(++this.stage);
+                    this.state = GameState.ShowStage;
+                }
+                return true;
         }
-
-        if (this.player.state == TankState.NONE) {
-            if (this.player.life > 1) {
-                this.player.birth(128, 384, 0, Const.DIRECTION_UP);
-            }
-
-            this.player.life--;
-
-            if (this.player.life >= 1) {
-                this.lifeLabel.setText(this.player.life - 1);
-            }
-        }
-
-        var over = this.birthIndex == this.tankTypes.length;
-        var liveTanks = 0;
-        for (var i = 0; i < this.tanks.length; i++) {
-            var tank = this.tanks[i];
-            if (tank != this.player && tank.state != TankState.NONE) {
-                over = false;
-                liveTanks++;
-            }
-            this.tanks[i].update();
-        }
-
-        for (var i = 0; i < this.animateBlocks.length; i++) {
-            this.animateBlocks[i].update();
-        }
-
-        if (!over && liveTanks < 3 && this.birthIndex < this.tankTypes.length) {
-            var newTank = new EnemyTank(this.gameArea, 1);
-            newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
-            newTank.birth(192 * (this.birthIndex % 3), 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
-            newTank.addToGameUI(this);
-            this.birthIndex++;
-            this.tanks.push(newTank);
-            this.updateLeftTank();
-        }
-
-        if (this.player.life <= 0 || over) {
-            if (!this.endCounter.countdown()) {
-                this.player.life = 3;
-                this.player.setType(0);
-                return false;
-            }
-        }
-
-        if (over) {
-            this.moveToStage(++this.stage);
-        }
-
+        
         return true;
     },
     updateLeftTank: function () {
@@ -289,7 +321,7 @@
             }
         }
     },
-    setBaseProof: function(time) {
+    setBaseProof: function (time) {
         this.baseProofCounter.setEnabled(true);
         var map = "";
         map += "5,11,2,8|";
@@ -323,7 +355,7 @@
             }
         }
     },
-    clearBaseProof: function() {
+    clearBaseProof: function () {
         var map = "";
         map += "5,11,1,8|";
         map += "5,12,1,10|";
@@ -357,19 +389,20 @@
         }
     },
     moveToStage: function (stage) {
-
-        this.stageShowCounter.setEnabled(true);
         
+        this.stageCounter.setEnabled(true);
+        this.stopCounter.setEnabled(false);
+
         this.gameArea.hide();
         this.gameArea.div.innerHTML = "";
-        
+
         // 初始化
         if (stage > this.maxStage) {
             stage = 1;
         }
         this.stage = stage;
         this.stageLabel.setText("Stage: " + this.stage);
-        this.bonus.taken = true;
+        this.bonus.flashCounter.setEnabled(false);
         this.bonus.sprite.hide();
         this.bonus.addToGameUI(this);
         this.baseProofCounter.setEnabled(false);
@@ -438,7 +471,18 @@
             }
         }
     },
-    restart: function () {
-        
-    }
+    setStage: function (stage) {
+        if (stage < 0) {
+            stage = this.maxStage;
+        }
+        else if (stage > 35) {
+            stage = 1;
+        }
+        this.stage = stage;
+        this.stageLabel.setText("Stage: " + this.stage);
+    },
+    stop: function (time) {
+        this.stopCounter.setCount(time);
+        this.stopCounter.setEnabled(true);
+    },
 });

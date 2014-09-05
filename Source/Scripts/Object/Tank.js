@@ -200,7 +200,7 @@ Tank = ClassFactory.createClass(GameObject, {
         
         if (block1 && block1.typeId == BlockTypeId.Ice || block2 && block2.typeId == BlockTypeId.Ice) {
             if (this.direction == Const.DIRECTION_UP) {
-                this.sprite.setY(Math.max(this.sprite.y - 0.5, 0));
+                this.sprite.setY(Math.max(this.sprite.y - 1, 0));
             }
             else if (this.direction == Const.DIRECTION_RIGHT) {
                 if (this.sprite.x + this.sprite.width + 1 <= this.gameUI.gameArea.width) {
@@ -261,16 +261,13 @@ Tank = ClassFactory.createClass(GameObject, {
                 if (this.sprite.moveToNextFrame()) {
                     return;
                 }
-
                 this.sprite.restoreFrameSequence();
+                this.sprite.setVisible(true);
                 this.state = TankState.LIVE;
+                
                 this.onBirth();
                 break;
             case TankState.LIVE:
-                if (!this.sprite.visible) {
-                    this.sprite.setVisible(true);
-                }
-
                 this.onLive();
 
                 break;
@@ -368,19 +365,19 @@ PlayerTank = ClassFactory.createClass(Tank, {
 
         this.sprite.moveToFrame(this.direction * 28 + this.wheel * 14 + this.icon + this.health - 1);
 
-        if (Input.isPressed(87)) {
+        if (Input.isPressed(InputAction.UP)) {
             this.direction = Const.DIRECTION_UP;
             this.move();
         }
-        else if (Input.isPressed(68)) {
+        else if (Input.isPressed(InputAction.RIGHT)) {
             this.direction = Const.DIRECTION_RIGHT;
             this.move();
         }
-        else if (Input.isPressed(83)) {
+        else if (Input.isPressed(InputAction.DOWN)) {
             this.direction = Const.DIRECTION_DOWN;
             this.move();
         }
-        else if (Input.isPressed(65)) {
+        else if (Input.isPressed(InputAction.LEFT)) {
             this.direction = Const.DIRECTION_LEFT;
             this.move();
         }
@@ -389,7 +386,7 @@ PlayerTank = ClassFactory.createClass(Tank, {
             this.fireCounter.setEnabled(false);
         }
 
-        if (Input.isPressed(74)) {
+        if (Input.isPressed(InputAction.GAME_A) || Input.isPressed(InputAction.GAME_C)) {
             if (!this.fireCounter.enabled) {
                 this.fireCounter.setEnabled(true);
                 this.fire();
@@ -423,8 +420,6 @@ EnemyTank = ClassFactory.createClass(Tank, {
         this.birthCounter = new Counter(30, false, true);
         this.birthCounter.setEnabled(false);
         this.moveCounter = new Counter(40, true, true);
-        this.stopCounter = new Counter(0, false, false);
-        this.stopCounter.setEnabled(false);
         this.flashRedCounter = new Counter(8, false, true);
         this.flashRed = false;
     },
@@ -472,20 +467,20 @@ EnemyTank = ClassFactory.createClass(Tank, {
         if (this.hasBonus && !this.flashRedCounter.countdown()) {
             this.flashRed = !this.flashRed;
         }
-
+        
         if (this.type == 3) {
             switch (this.health) {
                 case 1:
-                    this.icon = this.flashRed ? 11 : 10;
+                    this.icon = (this.hasBonus && this.flashRed) ? 11 : 10;
                     break;
                 case 2:
-                    this.icon = this.flashRed ? 11 : 13;
+                    this.icon = (this.hasBonus && this.flashRed) ? 11 : 13;
                     break;
                 case 3:
-                    this.icon = this.flashRed ? 11 : 13;
+                    this.icon = (this.hasBonus && this.flashRed) ? 11 : 13;
                     break;
                 case 4:
-                    this.icon = this.flashRed ? 11 : 12;
+                    this.icon = (this.hasBonus && this.flashRed) ? 11 : 12;
                     break;
             }
             this.sprite.moveToFrame(this.direction * 28 + this.wheel * 14 + this.icon);
@@ -501,13 +496,18 @@ EnemyTank = ClassFactory.createClass(Tank, {
         else {
             this.birthCounter.setEnabled(false); 
         }
-        /*
+        
         // 停止活动一段时间
-        if (this.stopCounter.enabled && this.stopCounter.countdown()) {
+        var stopCounter = this.gameUI.stopCounter;
+        
+        if (stopCounter.enabled) {
+            if (stopCounter.currentCount <= 120 && stopCounter.currentCount % 8 == 0) {
+                this.sprite.setVisible(!this.sprite.visible);
+            }
             return;
         }
         else {
-            this.stopCounter.setEnabled(false);
+            this.sprite.setVisible(true);
         }
 
         // 一段时间后改变移动方向
@@ -525,11 +525,7 @@ EnemyTank = ClassFactory.createClass(Tank, {
                 this.fire();
                 this.fireCounter.setEnabled(true);
             }
-        }*/
-    },
-    stop: function (time) {
-        this.stopCounter.setCount(time);
-        this.stopCounter.setEnabled(true);
+        }
     },
     hit: function () {
         if (this.hasBonus) {

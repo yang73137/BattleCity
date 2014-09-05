@@ -11,10 +11,10 @@ var InputAction =
     LEFT: 65,		//A
     RIGHT: 68,		//D
 
-    GAME_A: 73,		//I
-    GAME_B: 79,		//O
-    GAME_C: 75,		//K
-    GAME_D: 76,		//L
+    GAME_A: 74,		//J
+    GAME_B: 75,		//K
+    GAME_C: 85,		//U
+    GAME_D: 73,		//I
 
     START: 13,		//Enter
     SELECT: 16		//Shift
@@ -36,8 +36,8 @@ Input = function () {
     //
     arrRepeat[InputAction.START] =
     arrRepeat[InputAction.SELECT] =
-    arrRepeat[InputAction.GAME_C] =
-    arrRepeat[InputAction.GAME_D] = InputAction.NO_REPEAT;
+    arrRepeat[InputAction.GAME_A] =
+    arrRepeat[InputAction.GAME_B] = InputAction.NO_REPEAT;
 
     function handleKeyDown(e) {
         e = e || event;
