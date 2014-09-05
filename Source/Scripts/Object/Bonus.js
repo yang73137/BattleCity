@@ -18,7 +18,7 @@ Bonus = ClassFactory.createClass(GameObject, {
         this.flashCounter.setEnabled(false);
     },
     random: function () {
-        this.type = 5;//Math.round(Math.random() * 5);
+        this.type = Math.round(Math.random() * 5);
         var x = Math.round(Math.random() * 12) * 32;
         var y = Math.round(Math.random() * 12) * 32;
         this.sprite.setPosition(x, y);

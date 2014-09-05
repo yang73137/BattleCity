@@ -133,7 +133,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.player.life = 3;
         this.birthIndex = 0;
         this.state = GameState.SelectStage;
-        this.setStage(this.stage);
+        this.setStage(1);
         this.show();
     },
     onLevel: function () {
