@@ -7,7 +7,6 @@
 
         // 玩家
         this.player = new PlayerTank(0);
-        this.player.life = 3;
 
         // 块
         this.block32x32 = [];
@@ -30,8 +29,9 @@
         this.endCounter = new Counter(60, false, false);
 
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
-        this.setPosition(0, 0);
         this.setBackground("RGB(102,102,102)");
+        this.setPosition(0, 0);
+       
 
         // 游戏区域
         this.gameArea = new Layer();
@@ -118,8 +118,11 @@
         this.setPosition(0, 0);
     },
     onEnter: function () {
+        this.player.life = 3;
+        this.birthIndex = 0;
+
         this.show();
-        this.moveToStage(1);
+        this.moveToStage(28);
     },
     onLevel: function () {
         this.hide();
@@ -131,8 +134,8 @@
             return true;
         }
         else {
-            this.gameArea.show();
             this.stageLayer.hide();
+            this.gameArea.show();
             this.stageShowCounter.setEnabled(false);
         }
 
@@ -198,15 +201,16 @@
             var newTank = new EnemyTank(this.gameArea, 1);
             newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
             newTank.birth(192 * (this.birthIndex % 3), 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
+            newTank.addToGameUI(this);
             this.birthIndex++;
             this.tanks.push(newTank);
-            newTank.addToGameUI(this);
             this.updateLeftTank();
         }
 
         if (this.player.life <= 0 || over) {
             if (!this.endCounter.countdown()) {
                 this.player.life = 3;
+                this.player.setType(0);
                 return false;
             }
         }
@@ -355,27 +359,22 @@
     moveToStage: function (stage) {
 
         this.stageShowCounter.setEnabled(true);
-
+        
         this.gameArea.hide();
         this.gameArea.div.innerHTML = "";
-
-        this.baseProofCounter.setEnabled(false);
-
-        this.bonus.sprite.hide();
-        this.bonus.addToGameUI(this);
-
-
+        
+        // 初始化
         if (stage > this.maxStage) {
             stage = 1;
         }
         this.stage = stage;
-        
         this.stageLabel.setText("Stage: " + this.stage);
-
+        this.bonus.taken = true;
+        this.bonus.sprite.hide();
+        this.bonus.addToGameUI(this);
+        this.baseProofCounter.setEnabled(false);
         this.baseDestoryed = false;
         this.pause = false;
-
-        // 基地爆炸
         this.bomb.addToGameUI(this);
 
         this.player.state = TankState.RESET;
@@ -439,4 +438,7 @@
             }
         }
     },
+    restart: function () {
+        
+    }
 });
