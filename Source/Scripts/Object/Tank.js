@@ -233,7 +233,7 @@ Tank = ClassFactory.createClass(GameObject, {
      
 
         // 检测Bonus
-        if (this.team == 0 && this.sprite.collidesWith(this.gameUI.bonus.sprite)) {
+        if (this.team == 0 && this.sprite.collidesWith(this.gameUI.bonus.sprite) && this.gameUI.bonus.flashCounter.enabled) {
             this.gameUI.bonus.take();
         }
     },
@@ -277,10 +277,14 @@ Tank = ClassFactory.createClass(GameObject, {
                 break;
             case TankState.BOOM:
                 if (!this.bomb.update()) {
-                    this.state = TankState.SCORE;
-                    this.sprite.moveToFrame(116 + this.type);
-                    this.sprite.setZ(Const.Z_SCORE);
-                    this.sprite.show();
+                    if (this.team == 0) {
+                        this.state = TankState.NONE;
+                    } else {
+                        this.state = TankState.SCORE;
+                        this.sprite.moveToFrame(116 + this.type);
+                        this.sprite.setZ(Const.Z_SCORE);
+                        this.sprite.show();
+                    }
                 }
                 break;
             case TankState.SCORE:
@@ -327,7 +331,7 @@ PlayerTank = ClassFactory.createClass(Tank, {
         Tank.prototype.setType.call(this, type);
 
         this.icon = 0;
-        this.speed = 1.6;
+        this.speed = 1.5;
 
         switch (type) {
             case 0: // 普通
@@ -377,6 +381,10 @@ PlayerTank = ClassFactory.createClass(Tank, {
 
         this.sprite.moveToFrame(this.direction * 28 + this.wheel * 14 + this.icon + this.health - 1);
 
+        if (this.gameUI.baseDestoryed) {
+            return;
+        }
+        
         if (Input.isPressed(InputAction.UP)) {
             this.direction = Const.DIRECTION_UP;
             this.move();

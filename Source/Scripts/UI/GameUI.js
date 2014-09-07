@@ -26,7 +26,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.tanks = [];
 
         // 坦克类型数组
-        this.tankTypes = [0, 0, 0, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 3];
+        this.tankTypes = [3, 3, 3, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 3];
         this.bonusArr = [0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0];
 
         // 新建坦克索引
@@ -227,8 +227,26 @@ GameUI = ClassFactory.createClass(UIBase, {
                     this.cheat();
                 }
                 
+                var over = this.birthIndex == this.tankTypes.length;
+                var liveTanks = 1;
+                for (var i = 0; i < this.tanks.length; i++) {
+                    var tank = this.tanks[i];
+                    if (tank != this.player && tank.state != TankState.NONE) {
+                        over = false;
+                        liveTanks++;
+                    }
+                    if (!this.pauseCounter.enabled) {
+                        this.tanks[i].update();
+                    }
+                }
+                
                 if (Input.isPressed(InputAction.START)) {
                     this.pauseCounter.setEnabled(!this.pauseCounter.enabled);
+                }
+                
+                if (over || this.baseDestoryed) {
+                    this.pauseCounter.setEnabled(false);
+                    this.pauseCounter.reset();
                 }
                 
                 if (this.pauseCounter.enabled) {
@@ -253,23 +271,12 @@ GameUI = ClassFactory.createClass(UIBase, {
                     }
                 }
 
-                var over = this.birthIndex == this.tankTypes.length;
-                var liveTanks = 0;
-                for (var i = 0; i < this.tanks.length; i++) {
-                    var tank = this.tanks[i];
-                    if (tank != this.player && tank.state != TankState.NONE) {
-                        over = false;
-                        liveTanks++;
-                    }
-                    this.tanks[i].update();
-                }
-
                 if (!over && liveTanks < 4 && this.birthIndex < this.tankTypes.length) {
                     var x = 192 * ((this.birthIndex + 1) % 3);
                     if (!this.enemyBirthCounter.countdown()) {
                         var newTank = new EnemyTank(1);
                         newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
-                        newTank.birth(x, 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
+                        newTank.birth(x, 0, this.tankTypes[this.birthIndex], Const.DIRECTION_LEFT);
                         newTank.addToGameUI(this);
                         this.birthIndex++;
                         this.tanks.push(newTank);
@@ -415,7 +422,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.birthIndex = 0;
         this.stageCounter.setEnabled(true);
         this.stopCounter.setEnabled(false);
-        this.enemyBirthCounter.setCount(0);
+        this.enemyBirthCounter = new Counter(120, true, true);
 
 
         this.gameArea.hide();
