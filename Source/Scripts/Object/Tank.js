@@ -120,22 +120,24 @@ Tank = ClassFactory.createClass(GameObject, {
         this.wheel = +!this.wheel;
         var oldX = this.sprite.x;
         var oldY = this.sprite.y;
+        
 
         //检测和其他坦克碰撞
         for (var j = 0; j < this.gameUI.tanks.length; j++) {
             var tank = this.gameUI.tanks[j];
 
-            if (this == tank) {
+            if (this == tank || tank.state != TankState.LIVE) {
                 continue;
             }
             if (this.sprite.collidesWith(tank.sprite)) {
-                if (this.direction == Const.DIRECTION_UP) {
+                if (this.direction == Const.DIRECTION_UP && this.sprite.y - tank.sprite.y >= (this.sprite.height - this.speed)) {
                     this.sprite.setY(tank.sprite.y + tank.sprite.height);
-                } else if (this.direction == Const.DIRECTION_RIGHT) {
+                } else if (this.direction == Const.DIRECTION_RIGHT && tank.sprite.x - this.sprite.x >= (this.sprite.width - this.speed)) {
+                    console.log(this.sprite.x, tank.sprite.x);
                     this.sprite.setX(tank.sprite.x - this.sprite.width);
-                } else if (this.direction == Const.DIRECTION_DOWN) {
+                } else if (this.direction == Const.DIRECTION_DOWN && tank.sprite.y - this.sprite.y >= (this.sprite.height - this.speed)) {
                     this.sprite.setY(tank.sprite.y - this.sprite.height);
-                } else if (this.direction == Const.DIRECTION_LEFT) {
+                } else if (this.direction == Const.DIRECTION_LEFT && this.sprite.x - tank.sprite.x >= (this.sprite.width - this.speed)) {
                     this.sprite.setX(tank.sprite.x + tank.sprite.width);
                 }
             }
@@ -502,14 +504,14 @@ EnemyTank = ClassFactory.createClass(Tank, {
         
         if (stopCounter.enabled) {
             if (stopCounter.currentCount <= 120 && stopCounter.currentCount % 8 == 0) {
-                this.sprite.setVisible(!this.sprite.visible);
+                this.sprite.style.display = this.sprite.style.display == "block" ? "none" : "block";
             }
             return;
         }
         else {
             this.sprite.setVisible(true);
         }
-
+        /*
         // 一段时间后改变移动方向
         if (!this.moveCounter.countdown()) {
             var direction = Math.round(Math.random() * 3);
@@ -525,15 +527,17 @@ EnemyTank = ClassFactory.createClass(Tank, {
                 this.fire();
                 this.fireCounter.setEnabled(true);
             }
-        }
+        }*/
     },
     hit: function () {
-        if (this.hasBonus) {
-            this.gameUI.bonus.random();
-            this.setBonus(false);
-        }
-        if (--this.health == 0) {
-            this.boom();
+        if (this.state == TankState.LIVE) {
+            if (this.hasBonus) {
+                this.gameUI.bonus.random();
+                this.setBonus(false);
+            }
+            if (--this.health == 0) {
+                this.boom();
+            }
         }
     }
 });

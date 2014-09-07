@@ -5,11 +5,11 @@ Bomb = ClassFactory.createClass(GameObject, {
         GameObject.init.call(this);
 
         // 创建爆炸精灵
-        this.sprite = new Sprite(Const.IMAGE_BOOM, 64, 64, big ? [0, 1, 2, 3, 4, 1] : [0, 1]);
+        this.sprite = new Sprite(Const.IMAGE_BOOM, 64, 64, big ? [0, 1, 2, 3, 4] : [0, 1]);
         this.sprite.setZ(Const.Z_BOOM);
 
         if (big) {
-            this.sprite.setFrameCounter(2);
+            this.sprite.setFrameCounter(3);
         }
         else {
             this.sprite.setFrameCounter(0);
