@@ -137,7 +137,7 @@ Bullet = ClassFactory.createClass(GameObject, {
             for (var j = 0; j < this.gameUI.tanks.length; j++) {
                 var tank = this.gameUI.tanks[j];
 
-                if (this.team == tank.team) {
+                if (this.team == tank.team || tank.state != TankState.LIVE) {
                     continue;
                 }
 

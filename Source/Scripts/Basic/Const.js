@@ -10,9 +10,10 @@ var Const =
 	MAX_STAGE: 35,				// 总关数
 	MAX_TANK: 5,				// 最大坦克数
 
-	TIME_BULPRF_DEF: 250,		// 出生防弹时间
-	TIME_BULPRF_BONUS: 1200,	// 奖励防弹时间
-	TIME_WALL_IRON: 1200,		// 总部铁墙保护时间
+	TIME_BULPRF_DEF: 180,		// 出生防弹时间
+	TIME_BULPRF_BONUS: 720,	// 奖励防弹时间
+	TIME_WALL_IRON: 960,		// 总部铁墙保护时间
+	TIME_STOP_BONUS: 300,
 
 
 	//

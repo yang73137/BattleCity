@@ -53,6 +53,9 @@ Tank = ClassFactory.createClass(GameObject, {
         // 开火计时器
         this.fireCounter = new Counter(30, false, true);
         this.fireCounter.setEnabled(false);
+        
+        // 得分计数器
+        this.scoreCounter = new Counter(30, false, true);
     },
     setType: function (type) {
         this.type = type;
@@ -79,7 +82,7 @@ Tank = ClassFactory.createClass(GameObject, {
         this.setType(type);
         this.state = TankState.BIRTH;
         this.sprite.setRepeat(1);
-        this.sprite.setFrameCounter(2);
+        this.sprite.setFrameCounter(3);
         this.sprite.setFrameSequence([112, 113, 114, 115, 114, 113, 112, 113, 114, 115, 112, 113, 114, 115]);
         this.sprite.moveTo(x, y);
         this.direction = direction;
@@ -242,7 +245,7 @@ Tank = ClassFactory.createClass(GameObject, {
         this.state = TankState.BOOM;
     },
     onBirth: function () {
-
+        this.sprite.setFrameCounter(0);
     },
     onLive: function () { },
     update: function () {
@@ -274,15 +277,21 @@ Tank = ClassFactory.createClass(GameObject, {
                 break;
             case TankState.BOOM:
                 if (!this.bomb.update()) {
-                    this.state = TankState.NONE;
+                    this.state = TankState.SCORE;
+                    this.sprite.moveToFrame(116 + this.type);
+                    this.sprite.setZ(Const.Z_SCORE);
+                    this.sprite.show();
                 }
                 break;
             case TankState.SCORE:
-                if (this._tickScore.On())
-                    this._state = TankState.RESET;
+                if (this.scoreCounter.enabled && !this.scoreCounter.countdown()) {
+                    this.sprite.hide();
+                    this.state = TankState.RESET;
+                }
                 break;
             case TankState.RESET:
                 this.sprite.hide();
+                this.sprite.setZ(Const.Z_TANK);
                 this.state = TankState.NONE;
                 break;
         }
@@ -310,13 +319,15 @@ PlayerTank = ClassFactory.createClass(Tank, {
         this.bulletProofSprite = new Sprite(Const.IMAGE_MISC, 32, 32, [11, 12]);
         this.bulletProofSprite.setRepeat(0);
         this.bulletProofTime = 0;
+        
+        this.scoreCounter.setEnabled(false);
     },
     setType: function (type) {
 
         Tank.prototype.setType.call(this, type);
 
         this.icon = 0;
-        this.speed = 2;
+        this.speed = 1.6;
 
         switch (type) {
             case 0: // 普通
@@ -348,7 +359,7 @@ PlayerTank = ClassFactory.createClass(Tank, {
         this.bulletProofTime = time;
     },
     onBirth: function () {
-        this.setBulletProofTime(150);
+        this.setBulletProofTime(Const.TIME_BULPRF_DEF);
         this.bulletProofSprite.start();
     },
     onLive: function () {

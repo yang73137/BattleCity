@@ -106,7 +106,8 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.statusArea.append(this.lifeLabel);
 
         this.baseDestoryed = false;
-        this.baseProofCounter = new Counter(300, false, true);
+        this.baseFlash = true;
+        this.baseProofCounter = new Counter(Const.TIME_WALL_IRON, false, true);
         this.baseProofCounter.setEnabled(false);
         
         // 旗子
@@ -159,7 +160,7 @@ GameUI = ClassFactory.createClass(UIBase, {
 
         this.setPosition(0, 0);
         
-        this.stopCounter = new Counter(0, false, true);
+        this.stopCounter = new Counter(Const.TIME_STOP_BONUS, false, true);
         this.enemyBirthCounter = new Counter(120, true, true);
     },
     onEnter: function () {
@@ -214,7 +215,11 @@ GameUI = ClassFactory.createClass(UIBase, {
                 if (this.baseProofCounter.enabled) {
                     if (!this.baseProofCounter.countdown()) {
                         this.baseProofCounter.setEnabled(false);
-                        this.clearBaseProof();
+                        this.setBaseProof(false);
+                    } else {
+                        if (this.baseProofCounter.currentCount <= 240 && this.baseProofCounter.currentCount % 12 == 0) {
+                            this.setBaseProof(this.baseFlash = !this.baseFlash);
+                        }
                     }
                 }
 
@@ -364,47 +369,18 @@ GameUI = ClassFactory.createClass(UIBase, {
             }
         }
     },
-    setBaseProof: function (time) {
+    activateBaseProof: function () {
         this.baseProofCounter.setEnabled(true);
-        var map = "";
-        map += "5,11,2,8|";
-        map += "5,12,2,10|";
-        map += "6,11,2,12|";
-        map += "7,11,2,4|";
-        map += "7,12,2,5";
-        var matrix = map.split("|");
-        for (var i = 0; i < matrix.length; i++) {
-            var arr = matrix[i].split(",");
-            var x = +arr[0];
-            var y = +arr[1];
-            var typeId = +arr[2];
-            var area = +arr[3];
-            this.block32x32[x][y].sprite.hide();
-            var block = new Block(typeId, 32 * x, 32 * y, area);
-            block.addToGameUI(this);
-            this.block32x32[x][y] = block;
-
-            if ((area & 1) == 1) {
-                this.block16x16[x * 2][y * 2] = { block: block, typeId: typeId, areaIndex: 0 };
-            }
-            if ((area & 2) == 2) {
-                this.block16x16[x * 2 + 1][y * 2] = { block: block, typeId: typeId, areaIndex: 1 };
-            }
-            if ((area & 4) == 4) {
-                this.block16x16[x * 2][y * 2 + 1] = { block: block, typeId: typeId, areaIndex: 2 };
-            }
-            if ((area & 8) == 8) {
-                this.block16x16[x * 2 + 1][y * 2 + 1] = { block: block, typeId: typeId, areaIndex: 3 };
-            }
-        }
+        this.setBaseProof(true);
     },
-    clearBaseProof: function () {
+    setBaseProof: function (isIron) {
+        var type = isIron ? 2 : 1;
         var map = "";
-        map += "5,11,1,8|";
-        map += "5,12,1,10|";
-        map += "6,11,1,12|";
-        map += "7,11,1,4|";
-        map += "7,12,1,5";
+        map += "5,11," + type + ",8|";
+        map += "5,12," + type + ",10|";
+        map += "6,11," + type + ",12|";
+        map += "7,11," + type + ",4|";
+        map += "7,12," + type + ",5";
         var matrix = map.split("|");
         for (var i = 0; i < matrix.length; i++) {
             var arr = matrix[i].split(",");
@@ -432,12 +408,15 @@ GameUI = ClassFactory.createClass(UIBase, {
         }
     },
     moveToStage: function (stage) {
+        
         this.gameOverLabel.setPosition(208, this.height);
         this.gameOverLabel.hide();
         this.player.bulletProofSprite.hide();
         this.birthIndex = 0;
         this.stageCounter.setEnabled(true);
         this.stopCounter.setEnabled(false);
+        this.enemyBirthCounter.setCount(0);
+
 
         this.gameArea.hide();
         this.gameArea.div.innerHTML = "";
@@ -520,8 +499,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.stage = stage;
         this.stageLabel.setText("Stage: " + this.stage);
     },
-    stop: function (time) {
-        this.stopCounter.setCount(time);
+    stop: function () {
         this.stopCounter.setEnabled(true);
     },
 });

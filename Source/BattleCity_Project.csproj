@@ -57,6 +57,49 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BattleCity\debug\Index.html" />
+    <Content Include="BattleCity\debug\res\Boom.png" />
+    <Content Include="BattleCity\debug\res\Frag.png" />
+    <Content Include="BattleCity\debug\res\Misc.png" />
+    <Content Include="BattleCity\debug\res\Tank.png" />
+    <Content Include="BattleCity\debug\res\Terr.png" />
+    <Content Include="BattleCity\debug\res\UI.png" />
+    <Content Include="BattleCity\src\App.js" />
+    <Content Include="BattleCity\src\Const.js" />
+    <Content Include="BattleCity\src\Game.js" />
+    <Content Include="BattleCity\src\Object\Bonus.js" />
+    <Content Include="BattleCity\src\Object\Boom.js" />
+    <Content Include="BattleCity\src\Object\Bullet.js" />
+    <Content Include="BattleCity\src\Object\MyTank.js" />
+    <Content Include="BattleCity\src\Object\NPCTank.js" />
+    <Content Include="BattleCity\src\Object\Tank.js" />
+    <Content Include="BattleCity\src\Scene.js" />
+    <Content Include="BattleCity\src\UI\UIGame.js" />
+    <Content Include="BattleCity\src\UI\UIOpen.js" />
+    <Content Include="BattleCity\src\UI\UIOver.js" />
+    <Content Include="BattleCity\src\UI\UIScore.js" />
+    <Content Include="BattleCity\src\Util\Misc.js" />
+    <Content Include="BattleCity\src\Util\Tick.js" />
+    <Content Include="BattleCity\src\Util\Timer.js" />
+    <Content Include="BattleCity\src\WebPlay.js" />
+    <Content Include="BattleCity\Tool\demo1.png" />
+    <Content Include="BattleCity\Tool\demo2.PNG" />
+    <Content Include="BattleCity\Tool\MapEditor\Index.html" />
+    <Content Include="BattleCity\Tool\MapEditor\Terr.png" />
+    <Content Include="BattleCity\Tool\Pic.PNG" />
+    <Content Include="BattleCity\Tool\RAW\Boom.bmp" />
+    <Content Include="BattleCity\Tool\RAW\Frag.bmp" />
+    <Content Include="BattleCity\Tool\RAW\Game.bmp" />
+    <Content Include="BattleCity\Tool\RAW\GameX2.bmp" />
+    <Content Include="BattleCity\Tool\RAW\Misc.bmp" />
+    <Content Include="BattleCity\Tool\RAW\Rotate.html" />
+    <Content Include="BattleCity\Tool\RAW\T.bmp" />
+    <Content Include="BattleCity\Tool\RAW\Tile.bmp" />
+    <Content Include="BattleCity\Tool\RAW\TileFrag\T.html" />
+    <Content Include="BattleCity\Tool\RAW\TileFrag\T1.bmp" />
+    <Content Include="BattleCity\Tool\RAW\TileFrag\T2.bmp" />
+    <Content Include="BattleCity\Tool\RAW\TileFrag\TTT.bmp" />
+    <Content Include="BattleCity\Tool\RAW\TileFrag\X.bmp" />
     <Content Include="Images\Boom.png" />
     <Content Include="Images\Frag.png" />
     <Content Include="Images\Map\1.jpg" />
@@ -131,6 +174,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BattleCity\make.bat" />
+    <Content Include="BattleCity\src\Map.dat" />
+    <Content Include="BattleCity\Tool\Doc1.doc" />
+    <Content Include="BattleCity\Tool\MapEditor\Map.dat" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -138,7 +185,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BattleCity\release\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
