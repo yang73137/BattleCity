@@ -2,9 +2,7 @@
     init: function (text) {
         Layer.init.call(this);
         this.style.font = "22px 'Arial Black'";
-        if (typeof text == "string") {
-            this.setText(text);
-        }
+        this.setText("" + text);
     },
     setColor: function (color) {
         this.style.color = color;
