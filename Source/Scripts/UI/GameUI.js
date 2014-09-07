@@ -39,7 +39,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.endCounter = new Counter(120, false, true);
 
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
-        this.setBackground("RGB(102,102,102)");
+        this.setBackground("#7F7F7F");
         this.setPosition(0, 0);
 
 
@@ -52,13 +52,14 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.append(this.gameArea);
 
         // 暂停
-        this.pause = false;
-        this.pauseLabel = new Label("暂停");
-        this.pauseLabel.setColor("#FFF");
-        this.pauseLabel.setSize(46, 46);
-        this.pauseLabel.moveTo(233 - 15, 233 - 24);
+        this.pauseCounter = new Counter(15, false, true);
+        this.pauseCounter.setEnabled(false);
+        this.pauseLabel = new Label("PAUSE");
+        this.pauseLabel.setColor("#E05000");
+        this.pauseLabel.moveTo(196, 220);
         this.pauseLabel.hide();
         this.append(this.pauseLabel);
+        
 
         // 状态
         this.statusArea = new Layer();
@@ -83,24 +84,45 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.statusArea.append(this.leftTankLayer);
 
         // 玩家生命
+        this.playerLabel = this.lifeLabel = new Label("IP");
+        this.playerLabel.setColor("#000");
+        this.playerLabel.setCSS({ font: "22px 'Arial Black'" });
+        this.playerLabel.setPosition(15, 240);
+        this.playerLabel.show();
+        this.statusArea.append(this.playerLabel);
+
         this.lifeLayer = new Layer();
         this.lifeLayer.setSize(18, 18);
-        this.lifeLayer.setPosition(15, 410);
+        this.lifeLayer.setPosition(15, 270);
         this.lifeLayer.setBackground("url(" + Const.IMAGE_MISC.src + ") no-repeat -14px -18px");
         this.lifeLayer.show();
         this.statusArea.append(this.lifeLayer);
 
         this.lifeLabel = new Label("");
         this.lifeLabel.setColor("#000");
-        this.lifeLabel.setSize(32, 18);
-        this.lifeLabel.setCSS({ font: "16px 'Arial Black'" });
-        this.lifeLabel.moveTo(35, 405);
+        this.lifeLabel.setCSS({ font: "19px 'Arial Black'" });
+        this.lifeLabel.setPosition(35, 263);
         this.lifeLabel.show();
         this.statusArea.append(this.lifeLabel);
 
         this.baseDestoryed = false;
         this.baseProofCounter = new Counter(300, false, true);
         this.baseProofCounter.setEnabled(false);
+        
+        // 旗子
+        this.flagLayer = new Layer();
+        this.flagLayer.setSize(32, 32);
+        this.flagLayer.setPosition(15, 350);
+        this.flagLayer.setBackground("url(" + Const.IMAGE_MISC.src + ") no-repeat -128px -0px");
+        this.flagLayer.show();
+        this.statusArea.append(this.flagLayer);
+        
+        this.flagLabel = new Label();
+        this.flagLabel.setColor("#000");
+        this.flagLabel.setCSS({ font: "19px 'Arial Black'" });
+        this.flagLabel.setPosition(35, 375);
+        this.flagLabel.show();
+        this.statusArea.append(this.flagLabel);
 
         // 基地爆炸
         this.bomb = new Bomb(true);
@@ -126,7 +148,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.gameOverLabel.setSize(72, this.height);
         this.gameOverLabel.setPosition(208, this.height);
         this.gameOverLabel.setZ(Const.Z_UI);
-        this.gameOverLabel.setColor("rgb(181, 49, 32)");
+        this.gameOverLabel.setColor("#E05000");
         this.gameOverLabel.hide();
         this.append(this.gameOverLabel);
 
@@ -158,6 +180,9 @@ GameUI = ClassFactory.createClass(UIBase, {
                 this.stageLayer.show();
                 if (Input.isPressed(InputAction.GAME_A)) {
                     this.setStage(++this.stage);
+                }
+                if (Input.isPressed(InputAction.GAME_B)) {
+                    this.setStage(--this.stage);
                 }
                 if (Input.isPressed(InputAction.START)) {
                     this.stageLayer.hide();
@@ -198,11 +223,13 @@ GameUI = ClassFactory.createClass(UIBase, {
                 }
                 
                 if (Input.isPressed(InputAction.START)) {
-                    this.pause = !this.pause;
+                    this.pauseCounter.setEnabled(!this.pauseCounter.enabled);
                 }
                 
-                if (this.pause) {
-                    this.pauseLabel.show();
+                if (this.pauseCounter.enabled) {
+                    if (!this.pauseCounter.countdown()) {
+                        this.pauseLabel.setVisible(!this.pauseLabel.visible);
+                    }
                     return true;
                 }
                 else {
@@ -234,9 +261,7 @@ GameUI = ClassFactory.createClass(UIBase, {
 
                 if (!over && liveTanks < 4 && this.birthIndex < this.tankTypes.length) {
                     var x = 192 * ((this.birthIndex + 1) % 3);
-                    var canBirth = true;
-                    
-                    if (canBirth && !this.enemyBirthCounter.countdown()) {
+                    if (!this.enemyBirthCounter.countdown()) {
                         var newTank = new EnemyTank(1);
                         newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
                         newTank.birth(x, 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
@@ -423,12 +448,13 @@ GameUI = ClassFactory.createClass(UIBase, {
         }
         this.stage = stage;
         this.stageLabel.setText("Stage: " + this.stage);
+        this.flagLabel.setText(this.stage);
         this.bonus.flashCounter.setEnabled(false);
         this.bonus.sprite.hide();
         this.bonus.addToGameUI(this);
         this.baseProofCounter.setEnabled(false);
         this.baseDestoryed = false;
-        this.pause = false;
+        this.pauseCounter.setEnabled(false);
         this.bomb.addToGameUI(this);
 
         this.player.state = TankState.RESET;
@@ -485,10 +511,10 @@ GameUI = ClassFactory.createClass(UIBase, {
         }
     },
     setStage: function (stage) {
-        if (stage < 0) {
+        if (stage < 1) {
             stage = this.maxStage;
         }
-        else if (stage > 35) {
+        else if (stage > this.maxStage) {
             stage = 1;
         }
         this.stage = stage;

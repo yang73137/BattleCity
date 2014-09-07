@@ -133,7 +133,6 @@ Tank = ClassFactory.createClass(GameObject, {
                 if (this.direction == Const.DIRECTION_UP && this.sprite.y - tank.sprite.y >= (this.sprite.height - this.speed)) {
                     this.sprite.setY(tank.sprite.y + tank.sprite.height);
                 } else if (this.direction == Const.DIRECTION_RIGHT && tank.sprite.x - this.sprite.x >= (this.sprite.width - this.speed)) {
-                    console.log(this.sprite.x, tank.sprite.x);
                     this.sprite.setX(tank.sprite.x - this.sprite.width);
                 } else if (this.direction == Const.DIRECTION_DOWN && tank.sprite.y - this.sprite.y >= (this.sprite.height - this.speed)) {
                     this.sprite.setY(tank.sprite.y - this.sprite.height);
