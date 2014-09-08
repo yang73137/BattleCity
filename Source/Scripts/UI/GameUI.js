@@ -121,7 +121,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.flagLabel = new Label();
         this.flagLabel.setColor("#000");
         this.flagLabel.setCSS({ font: "19px 'Arial Black'" });
-        this.flagLabel.setPosition(35, 375);
+        this.flagLabel.setPosition(25, 375);
         this.flagLabel.show();
         this.statusArea.append(this.flagLabel);
 
@@ -162,6 +162,10 @@ GameUI = ClassFactory.createClass(UIBase, {
         
         this.stopCounter = new Counter(Const.TIME_STOP_BONUS, false, true);
         this.enemyBirthCounter = new Counter(120, true, true);
+        
+        // Score
+        this.scoreUI = new ScoreUI();
+        this.append(this.scoreUI);
     },
     onEnter: function () {
         this.player.life = 3;
@@ -271,7 +275,7 @@ GameUI = ClassFactory.createClass(UIBase, {
                     }
                 }
 
-                if (!over && liveTanks < 4 && this.birthIndex < this.tankTypes.length) {
+                if (!over && liveTanks <= 4 && this.birthIndex < this.tankTypes.length) {
                     var x = 192 * ((this.birthIndex + 1) % 3);
                     if (!this.enemyBirthCounter.countdown()) {
                         var newTank = new EnemyTank(1);
@@ -299,9 +303,18 @@ GameUI = ClassFactory.createClass(UIBase, {
                     }
                 }
 
-                if (over && !this.endCounter.countdown() ) {
+                if ((over || this.baseDestoryed) && !this.endCounter.countdown()) {
+                    this.state = GameState.SCORE;
+                    this.scoreUI.onEnter();
+                    //this.moveToStage(++this.stage);
+                    //this.state = GameState.ShowStage;
+                }
+                return true;
+            case GameState.SCORE:
+                if (!this.scoreUI.onUpdate()) {
                     this.moveToStage(++this.stage);
-                    this.state = GameState.ShowStage;
+                    this.scoreUI.onLevel();
+                    return false;
                 }
                 return true;
         }

@@ -13,7 +13,7 @@
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setPosition(0, 0);
 
-        this.counter = new Counter(120, false, true);
+        this.counter = new Counter(180, false, true);
     },
     onEnter: function() {
         this.show();
