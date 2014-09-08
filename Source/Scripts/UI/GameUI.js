@@ -26,7 +26,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         this.tanks = [];
 
         // 坦克类型数组
-        this.tankTypes = [3, 3, 3, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 3];
+        this.tankTypes = [0, 0, 0, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 0];
         this.bonusArr = [0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0];
 
         // 新建坦克索引
@@ -248,7 +248,7 @@ GameUI = ClassFactory.createClass(UIBase, {
                     this.pauseCounter.setEnabled(!this.pauseCounter.enabled);
                 }
                 
-                if (over || this.baseDestoryed) {
+                if (over || this.isFailed()) {
                     this.pauseCounter.setEnabled(false);
                     this.pauseCounter.reset();
                 }
@@ -280,7 +280,7 @@ GameUI = ClassFactory.createClass(UIBase, {
                     if (!this.enemyBirthCounter.countdown()) {
                         var newTank = new EnemyTank(1);
                         newTank.setBonus(!!(this.bonusArr[this.birthIndex]));
-                        newTank.birth(x, 0, this.tankTypes[this.birthIndex], Const.DIRECTION_LEFT);
+                        newTank.birth(x, 0, this.tankTypes[this.birthIndex], Const.DIRECTION_DOWN);
                         newTank.addToGameUI(this);
                         this.birthIndex++;
                         this.tanks.push(newTank);
@@ -292,18 +292,14 @@ GameUI = ClassFactory.createClass(UIBase, {
                     this.bomb.update();
                 }
 
-                if (this.player.life <= 0 || this.baseDestoryed) {
+                if (this.isFailed()) {
                     this.gameOverLabel.show();
                     if (this.gameOverLabel.y > 180) {
                         this.gameOverLabel.moveBy(0, -2);
-                    } else {
-                        this.player.life = 3;
-                        this.player.setType(0);
-                        return false;
                     }
                 }
 
-                if ((over || this.baseDestoryed) && !this.endCounter.countdown()) {
+                if ((over || this.isFailed()) && !this.endCounter.countdown()) {
                     this.state = GameState.SCORE;
                     this.scoreUI.onEnter();
                     //this.moveToStage(++this.stage);
@@ -312,9 +308,15 @@ GameUI = ClassFactory.createClass(UIBase, {
                 return true;
             case GameState.SCORE:
                 if (!this.scoreUI.onUpdate()) {
-                    this.moveToStage(++this.stage);
                     this.scoreUI.onLevel();
-                    return false;
+                    if (this.isFailed()) {
+                        this.player.life = 3;
+                        this.player.setType(0);
+                        return false;
+                    } else {
+                        this.moveToStage(++this.stage);
+                        return true;
+                    }
                 }
                 return true;
         }
@@ -428,7 +430,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         }
     },
     moveToStage: function (stage) {
-        
+        this.state = GameState.ShowStage;
         this.gameOverLabel.setPosition(208, this.height);
         this.gameOverLabel.hide();
         this.player.bulletProofSprite.hide();
@@ -522,4 +524,7 @@ GameUI = ClassFactory.createClass(UIBase, {
     stop: function () {
         this.stopCounter.setEnabled(true);
     },
+    isFailed: function () {
+        return this.player.life <= 0 || this.baseDestoryed;
+    }
 });
