@@ -533,7 +533,7 @@ EnemyTank = ClassFactory.createClass(Tank, {
         else {
             this.sprite.setVisible(true);
         }
-        /*
+        
         // 一段时间后改变移动方向
         if (!this.moveCounter.countdown()) {
             var direction = Math.round(Math.random() * 3);
@@ -549,7 +549,7 @@ EnemyTank = ClassFactory.createClass(Tank, {
                 this.fire();
                 this.fireCounter.setEnabled(true);
             }
-        }*/
+        }
     },
     hit: function () {
         if (this.state == TankState.LIVE) {
