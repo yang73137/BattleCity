@@ -34,22 +34,22 @@
     <div id="app" class="app"></div>
     <div style="width: 512px; margin-top: 50px;">
         <div style="float: left">
-            <input class="button" style="margin-left: 50px;" type="text" value="上" onfocus="Input.keyPress(InputAction.UP);" onblur="Input.keyRelease(InputAction.UP);" />
+            <input class="button" style="margin-left: 50px;" type="button" value="上" onmousedown="Input.keyPress(InputAction.UP);" onmouseup="Input.keyRelease(InputAction.UP);" />
             <br />
             <br />
-            <input class="button" type="text" value="左" onfocus="Input.keyPress(InputAction.LEFT);" onblur="Input.keyRelease(InputAction.LEFT);" />
-            <input style="margin-left: 55px;" class="button" type="text" value="右" onfocus="Input.keyPress(InputAction.RIGHT);" onblur="Input.keyRelease(InputAction.RIGHT);" />
+            <input class="button" type="button" value="左" onmousedown="Input.keyPress(InputAction.LEFT);" onmouseup="Input.keyRelease(InputAction.LEFT);" />
+            <input style="margin-left: 55px;" class="button" type="button" value="右" onmousedown="Input.keyPress(InputAction.RIGHT);" onmouseup="Input.keyRelease(InputAction.RIGHT);" />
             <br />
             <br />
-            <input class="button" style="margin-left: 50px;" type="text" value="下" onfocus="Input.keyPress(InputAction.DOWN);" onblur="Input.keyRelease(InputAction.DOWN);" />
+            <input class="button" style="margin-left: 50px;" type="button" value="下" onmousedown="Input.keyPress(InputAction.DOWN);" onmouseup="Input.keyRelease(InputAction.DOWN);" />
         </div>
         <div style="float: left; padding-top: 50px;">
-            <input class="button" style="width: 50px; margin-left: 30px;" type="text" value="开始" onfocus="Input.keyPress(InputAction.START);" onblur="Input.keyRelease(InputAction.START);" />
-            <input class="button" style="width: 50px; margin-left: 30px;" type="text" value="选择" onfocus="Input.keyPress(InputAction.SELECT);" onblur="Input.keyRelease(InputAction.SELECT);" />
+            <input class="button" style="width: 50px; margin-left: 30px;" type="button" value="开始" onmousedown="Input.keyPress(InputAction.START);" onmouseup="Input.keyRelease(InputAction.START);" />
+            <input class="button" style="width: 50px; margin-left: 30px;" type="button" value="选择" onmousedown="Input.keyPress(InputAction.SELECT);" onmouseup="Input.keyRelease(InputAction.SELECT);" />
         </div>
         <div style="float: left; padding-top: 50px;">
-            <input class="button" style="margin-left: 30px;" type="text" value="A" onfocus="Input.keyPress(InputAction.GAME_A);" onblur="Input.keyRelease(InputAction.GAME_A);" />
-            <input class="button" style="margin-left: 30px;" type="text" value="B" onfocus="Input.keyPress(InputAction.GAME_B);" onblur="Input.keyRelease(InputAction.GAME_B);" />
+            <input class="button" style="margin-left: 30px;" type="button" value="A" onmousedown="Input.keyPress(InputAction.GAME_A);" onmouseup="Input.keyRelease(InputAction.GAME_A);" />
+            <input class="button" style="margin-left: 30px;" type="button" value="B" onmousedown="Input.keyPress(InputAction.GAME_B);" onmouseup="Input.keyRelease(InputAction.GAME_B);" />
         </div>
     </div>
 
