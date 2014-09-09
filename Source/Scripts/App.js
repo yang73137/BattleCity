@@ -26,12 +26,17 @@
 
         App.init();
 
+        //this.scoreUI = new ScoreUI();
+        //this.scenes = [this.scoreUI];
+        //this.scoreUI.appendTo(this.container);
+
         if (App.scenesIndex == -1) {
             App.scenesIndex = 0;
             App.scenes[0].enter();
         }
         var app = App;
         setInterval(function () {
+            
             if (!app.scenes[app.scenesIndex].update()) {
                 app.scenes[app.scenesIndex].level();
                 app.scenesIndex++;
@@ -40,6 +45,7 @@
                 }
                 app.scenes[app.scenesIndex].enter();
             }
+            //app.scenes[app.scenesIndex].update();
         }, 16);
     },
     error: function (src, loaded, total) {

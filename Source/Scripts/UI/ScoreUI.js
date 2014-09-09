@@ -19,11 +19,11 @@
         this.highestScoreNumberLabel.show();
         this.append(this.highestScoreNumberLabel);
 
-        this.scoreStageLabel = new Label("STAGE     " + this.stage);
-        this.scoreStageLabel.setCSS({ "color": "#ffffff" });
-        this.scoreStageLabel.setPosition(190, 64);
-        this.scoreStageLabel.show();
-        this.append(this.scoreStageLabel);
+        this.stageLabel = new Label("STAGE     " + this.stage);
+        this.stageLabel.setCSS({ "color": "#ffffff" });
+        this.stageLabel.setPosition(190, 64);
+        this.stageLabel.show();
+        this.append(this.stageLabel);
 
         this.player1Label = new Label("I-PLAYER");
         this.player1Label.setCSS({ "color": "#E05000" });
@@ -47,7 +47,7 @@
         this.enemy1ScoreLabel.show();
         this.append(this.enemy1ScoreLabel);
 
-        this.enemy1NumberLabel = new Label("18");
+        this.enemy1NumberLabel = new Label("0");
         this.enemy1NumberLabel.setCSS({ "color": "#ffffff" });
         this.enemy1NumberLabel.setSize(32, 32);
         this.enemy1NumberLabel.setAlign("right");
@@ -77,7 +77,7 @@
         this.enemy2ScoreLabel.show();
         this.append(this.enemy2ScoreLabel);
 
-        this.enemy2NumberLabel = new Label("18");
+        this.enemy2NumberLabel = new Label("0");
         this.enemy2NumberLabel.setCSS({ "color": "#ffffff" });
         this.enemy2NumberLabel.setSize(32, 32);
         this.enemy2NumberLabel.setAlign("right");
@@ -99,15 +99,15 @@
         this.enemy2Layer.show();
         this.append(this.enemy2Layer);
 
-        this.enemy2ScoreLabel = new Label("0  PTS");
-        this.enemy2ScoreLabel.setCSS({ "color": "#ffffff" });
-        this.enemy2ScoreLabel.setSize(115, 32);
-        this.enemy2ScoreLabel.setAlign("right");
-        this.enemy2ScoreLabel.setPosition(50, 268);
-        this.enemy2ScoreLabel.show();
-        this.append(this.enemy2ScoreLabel);
+        this.enemy3ScoreLabel = new Label("0  PTS");
+        this.enemy3ScoreLabel.setCSS({ "color": "#ffffff" });
+        this.enemy3ScoreLabel.setSize(115, 32);
+        this.enemy3ScoreLabel.setAlign("right");
+        this.enemy3ScoreLabel.setPosition(50, 268);
+        this.enemy3ScoreLabel.show();
+        this.append(this.enemy3ScoreLabel);
 
-        this.enemy3NumberLabel = new Label("18");
+        this.enemy3NumberLabel = new Label("0");
         this.enemy3NumberLabel.setCSS({ "color": "#ffffff" });
         this.enemy3NumberLabel.setSize(32, 32);
         this.enemy3NumberLabel.setAlign("right");
@@ -181,16 +181,84 @@
         this.counter = new Counter(180, false, true);
     },
     onEnter: function () {
+        this.stageLabel.setText("STAGE  " + 12);
+
+        this.enemy1Number = 3;
+        this.enemy1NumberIndex = 0;
+        this.enemy1NumberLabel.setText(0);
+        this.enemy1ScoreLabel.setText(0);
+
+        this.enemy2Number = 2;
+        this.enemy2NumberIndex = 0;
+        this.enemy2NumberLabel.setText(0);
+        this.enemy2ScoreLabel.setText(0);
+
+        this.enemy3Number = 5;
+        this.enemy3NumberIndex = 0;
+        this.enemy3NumberLabel.setText(0);
+        this.enemy3ScoreLabel.setText(0);
+
+        this.enemy4Number = 0;
+        this.enemy4NumberIndex = 0;
+        this.enemy4NumberLabel.setText(0);
+        this.enemy4ScoreLabel.setText(0);
+
+        this.total = 0;
+        this.totalNumberLabel.setText(0);
+
+        this.delayCounter = new Counter(15, false, true);
         this.show();
     },
     onLevel: function () {
         this.hide();
     },
     onUpdate: function () {
+        if (this.enemy1NumberIndex <= this.enemy1Number) {
+            if (!this.delayCounter.countdown()) {
+                this.enemy1NumberLabel.setText(this.enemy1NumberIndex);
+                this.enemy1ScoreLabel.setText(this.enemy1NumberIndex * 100 + "  PTS ");
+
+                this.enemy1NumberIndex++;
+            }
+            return true;
+        }
+        else if (this.enemy2NumberIndex <= this.enemy2Number) {
+            if (!this.delayCounter.countdown()) {
+                this.enemy2NumberLabel.setText(this.enemy2NumberIndex);
+                this.enemy2ScoreLabel.setText(this.enemy2NumberIndex * 200 + "  PTS ");
+
+                this.enemy2NumberIndex++;
+            }
+            return true;
+        }
+        else if (this.enemy3NumberIndex <= this.enemy3Number) {
+            if (!this.delayCounter.countdown()) {
+                this.enemy3NumberLabel.setText(this.enemy3NumberIndex);
+                this.enemy3ScoreLabel.setText(this.enemy3NumberIndex * 300 + "  PTS ");
+
+                this.enemy3NumberIndex++;
+            }
+            return true;
+        }
+        else if (this.enemy4NumberIndex <= this.enemy4Number) {
+            if (!this.delayCounter.countdown()) {
+                this.enemy4NumberLabel.setText(this.enemy4NumberIndex);
+                this.enemy4ScoreLabel.setText(this.enemy4NumberIndex * 400 + "  PTS ");
+
+                this.enemy4NumberIndex++;
+            }
+            return true;
+        }
+        else if (this.total == 0){
+            if (!this.delayCounter.countdown()) {
+                this.total = this.enemy1Number * 100 + this.enemy2Number * 200 + this.enemy3Number * 300 + this.enemy4Number * 400;
+                this.totalNumberLabel.setText(this.total);
+            }
+            return true;
+        }
         if (!this.counter.countdown()) {
             return false;
         }
-
         return true;
     }
 });
