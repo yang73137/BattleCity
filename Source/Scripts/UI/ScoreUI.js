@@ -5,7 +5,7 @@
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setBackground("#000000");
         this.setPosition(0, 0);
-        this.setZ(9999);
+        this.setZ(Const.Z_UI);
 
         this.highestScoreLabel = new Label("HI-SCORE");
         this.highestScoreLabel.setCSS({ "color": "#E05000" });
@@ -27,13 +27,15 @@
 
         this.player1Label = new Label("I-PLAYER");
         this.player1Label.setCSS({ "color": "#E05000" });
+        this.player1Label.setSize(130, 32);
+        this.player1Label.setAlign("right");
         this.player1Label.setPosition(50, 96);
         this.player1Label.show();
         this.append(this.player1Label);
 
         this.player1ScoreLabel = new Label("0");
         this.player1ScoreLabel.setCSS({ "color": "#FFA000" });
-        this.player1ScoreLabel.setSize(115, 32);
+        this.player1ScoreLabel.setSize(130, 32);
         this.player1ScoreLabel.setAlign("right");
         this.player1ScoreLabel.setPosition(50, 128);
         this.player1ScoreLabel.show();
@@ -41,7 +43,7 @@
 
         this.enemy1ScoreLabel = new Label("0  PTS");
         this.enemy1ScoreLabel.setCSS({ "color": "#ffffff" });
-        this.enemy1ScoreLabel.setSize(115, 32);
+        this.enemy1ScoreLabel.setSize(130, 32);
         this.enemy1ScoreLabel.setAlign("right");
         this.enemy1ScoreLabel.setPosition(50, 172);
         this.enemy1ScoreLabel.show();
@@ -71,7 +73,7 @@
 
         this.enemy2ScoreLabel = new Label("0  PTS");
         this.enemy2ScoreLabel.setCSS({ "color": "#ffffff" });
-        this.enemy2ScoreLabel.setSize(115, 32);
+        this.enemy2ScoreLabel.setSize(130, 32);
         this.enemy2ScoreLabel.setAlign("right");
         this.enemy2ScoreLabel.setPosition(50, 220);
         this.enemy2ScoreLabel.show();
@@ -101,7 +103,7 @@
 
         this.enemy3ScoreLabel = new Label("0  PTS");
         this.enemy3ScoreLabel.setCSS({ "color": "#ffffff" });
-        this.enemy3ScoreLabel.setSize(115, 32);
+        this.enemy3ScoreLabel.setSize(130, 32);
         this.enemy3ScoreLabel.setAlign("right");
         this.enemy3ScoreLabel.setPosition(50, 268);
         this.enemy3ScoreLabel.show();
@@ -131,7 +133,7 @@
 
         this.enemy4ScoreLabel = new Label("0  PTS");
         this.enemy4ScoreLabel.setCSS({ "color": "#ffffff" });
-        this.enemy4ScoreLabel.setSize(115, 32);
+        this.enemy4ScoreLabel.setSize(130, 32);
         this.enemy4ScoreLabel.setAlign("right");
         this.enemy4ScoreLabel.setPosition(50, 316);
         this.enemy4ScoreLabel.show();
@@ -162,51 +164,57 @@
         this.underlineLayer = new Layer();
         this.underlineLayer.setSize(130, 3);
         this.underlineLayer.setBackground("#ffffff");
-        this.underlineLayer.setPosition(185, 350);
+        this.underlineLayer.setPosition(190, 350);
         this.underlineLayer.show();
         this.append(this.underlineLayer);
 
-        this.totalLayer = new Label("TOTAL");
-        this.totalLayer.setCSS({ "color": "#ffffff" });
-        this.totalLayer.setPosition(85, 352);
-        this.totalLayer.show();
-        this.append(this.totalLayer);
+        this.totalLabel = new Label("TOTAL");
+        this.totalLabel.setCSS({ "color": "#ffffff" });
+        this.totalLabel.setSize(130, 32);
+        this.totalLabel.setAlign("right");
+        this.totalLabel.setPosition(50, 352);
+        this.totalLabel.show();
+        this.append(this.totalLabel);
 
         this.totalNumberLabel = new Label("0");
         this.totalNumberLabel.setCSS({ "color": "#ffffff" });
-        this.totalNumberLabel.setPosition(207, 352);
+        this.totalNumberLabel.setSize(32, 32);
+        this.totalNumberLabel.setAlign("right");
+        this.totalNumberLabel.setPosition(190, 352);
         this.totalNumberLabel.show();
         this.append(this.totalNumberLabel);
 
+        // 计数器
         this.counter = new Counter(180, false, true);
-    },
-    onEnter: function () {
-        this.stageLabel.setText("STAGE  " + 12);
+        this.delayCounter = new Counter(12, false, true);
 
-        this.enemy1Number = 3;
+        this.highestScore = 0;
+        this.player1Score = 0;
+        this.stage = 0;
+        this.enemy1Number = 0;
         this.enemy1NumberIndex = 0;
-        this.enemy1NumberLabel.setText(0);
-        this.enemy1ScoreLabel.setText(0);
-
-        this.enemy2Number = 2;
+        this.enemy2Number = 0;
         this.enemy2NumberIndex = 0;
-        this.enemy2NumberLabel.setText(0);
-        this.enemy2ScoreLabel.setText(0);
-
-        this.enemy3Number = 5;
+        this.enemy3Number = 0;
         this.enemy3NumberIndex = 0;
-        this.enemy3NumberLabel.setText(0);
-        this.enemy3ScoreLabel.setText(0);
-
         this.enemy4Number = 0;
         this.enemy4NumberIndex = 0;
+    },
+    onEnter: function () {
+        this.highestScoreNumberLabel.setText(this.highestScore);
+        this.player1ScoreLabel.setText(this.player1Score);
+        this.stageLabel.setText("STAGE     " + this.stage);
+        this.enemy1NumberLabel.setText(0);
+        this.enemy1NumberIndex = 0;
+        this.enemy1ScoreLabel.setText("0  PTS");
+        this.enemy2NumberLabel.setText(0);
+        this.enemy2ScoreLabel.setText("0  PTS");
+        this.enemy3NumberLabel.setText(0);
+        this.enemy3ScoreLabel.setText("0  PTS");
         this.enemy4NumberLabel.setText(0);
-        this.enemy4ScoreLabel.setText(0);
-
-        this.total = 0;
+        this.enemy4ScoreLabel.setText("0  PTS");
         this.totalNumberLabel.setText(0);
 
-        this.delayCounter = new Counter(15, false, true);
         this.show();
     },
     onLevel: function () {
@@ -216,7 +224,7 @@
         if (this.enemy1NumberIndex <= this.enemy1Number) {
             if (!this.delayCounter.countdown()) {
                 this.enemy1NumberLabel.setText(this.enemy1NumberIndex);
-                this.enemy1ScoreLabel.setText(this.enemy1NumberIndex * 100 + "  PTS ");
+                this.enemy1ScoreLabel.setText(this.enemy1NumberIndex * 100 + "  PTS");
 
                 this.enemy1NumberIndex++;
             }
@@ -225,7 +233,7 @@
         else if (this.enemy2NumberIndex <= this.enemy2Number) {
             if (!this.delayCounter.countdown()) {
                 this.enemy2NumberLabel.setText(this.enemy2NumberIndex);
-                this.enemy2ScoreLabel.setText(this.enemy2NumberIndex * 200 + "  PTS ");
+                this.enemy2ScoreLabel.setText(this.enemy2NumberIndex * 200 + "  PTS");
 
                 this.enemy2NumberIndex++;
             }
@@ -234,7 +242,7 @@
         else if (this.enemy3NumberIndex <= this.enemy3Number) {
             if (!this.delayCounter.countdown()) {
                 this.enemy3NumberLabel.setText(this.enemy3NumberIndex);
-                this.enemy3ScoreLabel.setText(this.enemy3NumberIndex * 300 + "  PTS ");
+                this.enemy3ScoreLabel.setText(this.enemy3NumberIndex * 300 + "  PTS");
 
                 this.enemy3NumberIndex++;
             }
@@ -243,22 +251,29 @@
         else if (this.enemy4NumberIndex <= this.enemy4Number) {
             if (!this.delayCounter.countdown()) {
                 this.enemy4NumberLabel.setText(this.enemy4NumberIndex);
-                this.enemy4ScoreLabel.setText(this.enemy4NumberIndex * 400 + "  PTS ");
+                this.enemy4ScoreLabel.setText(this.enemy4NumberIndex * 400 + "  PTS");
 
                 this.enemy4NumberIndex++;
             }
             return true;
         }
-        else if (this.total == 0){
-            if (!this.delayCounter.countdown()) {
-                this.total = this.enemy1Number * 100 + this.enemy2Number * 200 + this.enemy3Number * 300 + this.enemy4Number * 400;
-                this.totalNumberLabel.setText(this.total);
-            }
+        else if (!this.delayCounter.countdown()) {
+            var total = this.enemy1Number + this.enemy2Number + this.enemy3Number + this.enemy4Number;
+            this.totalNumberLabel.setText(total);
             return true;
         }
         if (!this.counter.countdown()) {
             return false;
         }
         return true;
+    },
+    setData: function (stage, player1Score, enemy1Number, enemy2Number, enemy3Number, enemy4Number) {
+        this.highestScore = Math.max(Const.MAX_SCORE, player1Score);
+        this.stage = stage;
+        this.player1Score = player1Score;
+        this.enemy1Number = enemy1Number;
+        this.enemy2Number = enemy2Number;
+        this.enemy3Number = enemy3Number;
+        this.enemy4Number = enemy4Number;
     }
 });

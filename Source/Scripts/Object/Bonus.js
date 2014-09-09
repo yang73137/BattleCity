@@ -35,6 +35,7 @@ Bonus = ClassFactory.createClass(GameObject, {
         
         this.flashCounter.setEnabled(false);
         this.scoreCounter.setEnabled(true);
+        this.gameUI.addScore(500);
 
         this.sprite.setFrameSequence([120]);
         this.sprite.moveToFrame(0);

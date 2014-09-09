@@ -48,7 +48,7 @@ Tank = ClassFactory.createClass(GameObject, {
         this.sprite.setZ(Const.Z_TANK);
 
         // 被击中爆炸
-        this.bomb = new Bomb(true);
+        this.baseBomb = new Bomb(true);
 
         // 开火计时器
         this.fireCounter = new Counter(30, false, true);
@@ -241,8 +241,11 @@ Tank = ClassFactory.createClass(GameObject, {
     },
     boom: function () {
         this.sprite.hide();
-        this.bomb.boom(this.sprite.x - 16, this.sprite.y - 16);
+        this.baseBomb.boom(this.sprite.x - 16, this.sprite.y - 16);
         this.state = TankState.BOOM;
+        if (this.team == 1) {
+            this.gameUI.addScore((this.type + 1) * 100);
+        }
     },
     onBirth: function () {
         this.sprite.setFrameCounter(0);
@@ -276,7 +279,7 @@ Tank = ClassFactory.createClass(GameObject, {
 
                 break;
             case TankState.BOOM:
-                if (!this.bomb.update()) {
+                if (!this.baseBomb.update()) {
                     if (this.team == 0) {
                         this.state = TankState.NONE;
                     } else {
@@ -310,7 +313,7 @@ Tank = ClassFactory.createClass(GameObject, {
                 bullet.addToGameUI(gameUI);
             }
         }
-        this.bomb.addToGameUI(gameUI);
+        this.baseBomb.addToGameUI(gameUI);
     }
 });
 
@@ -319,6 +322,7 @@ PlayerTank = ClassFactory.createClass(Tank, {
         Tank.init.call(this, team);
         // 生命数
         this.life = 0;
+        
         // 防弹效果
         this.bulletProofSprite = new Sprite(Const.IMAGE_MISC, 32, 32, [11, 12]);
         this.bulletProofSprite.setRepeat(0);

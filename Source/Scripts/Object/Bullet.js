@@ -30,7 +30,7 @@ Bullet = ClassFactory.createClass(GameObject, {
         this.sprite.setZ(Const.Z_BULL);
 
         // 爆炸
-        this.bomb = new Bomb(false);
+        this.baseBomb = new Bomb(false);
 
         // 速度
         this.speed = 2;
@@ -82,7 +82,7 @@ Bullet = ClassFactory.createClass(GameObject, {
                 switch (this.move()) {
                     case HitState.HIT:
                         this.sprite.hide();
-                        this.bomb.boom(this.sprite.x - 32, this.sprite.y - 32);
+                        this.baseBomb.boom(this.sprite.x - 32, this.sprite.y - 32);
                         this.state = BullState.BOOM;
                         break;
                     case HitState.MISS:
@@ -91,7 +91,7 @@ Bullet = ClassFactory.createClass(GameObject, {
                 }
                 break;
             case BullState.BOOM:
-                if (!this.bomb.update()) {
+                if (!this.baseBomb.update()) {
                     this.state = BullState.RESET;
                 }
                 break;
@@ -106,28 +106,28 @@ Bullet = ClassFactory.createClass(GameObject, {
                 case Const.DIRECTION_UP:
                     this.sprite.y -= 1;
                     if (this.sprite.y <= 0) {
-                        this.bomb.boom(this.sprite.x - 28, -32);
+                        this.baseBomb.boom(this.sprite.x - 28, -32);
                         return HitState.HIT;
                     }
                     break;
                 case Const.DIRECTION_RIGHT:
                     this.sprite.x += 1;
                     if (this.sprite.x + this.sprite.width >= this.gameUI.gameArea.width) {
-                        this.bomb.boom(416 - 32, this.sprite.y - 28);
+                        this.baseBomb.boom(416 - 32, this.sprite.y - 28);
                         return HitState.HIT;
                     }
                     break;
                 case Const.DIRECTION_DOWN:
                     this.sprite.y += 1;
                     if (this.sprite.y + this.sprite.height >= 416) {
-                        this.bomb.boom(this.sprite.x - 28, this.gameUI.gameArea.height - 32);
+                        this.baseBomb.boom(this.sprite.x - 28, this.gameUI.gameArea.height - 32);
                         return HitState.HIT;
                     }
                     break;
                 case Const.DIRECTION_LEFT:
                     this.sprite.x -= 1;
                     if (this.sprite.x <= 0) {
-                        this.bomb.boom(-32, this.sprite.y - 28);
+                        this.baseBomb.boom(-32, this.sprite.y - 28);
                         return HitState.HIT;
                     }
                     break;
@@ -226,6 +226,6 @@ Bullet = ClassFactory.createClass(GameObject, {
     addToGameUI: function (gameUI) {
         GameObject.prototype.addToGameUI.call(this, gameUI);
         gameUI.gameArea.append(this.sprite);
-        this.bomb.addToGameUI(gameUI);
+        this.baseBomb.addToGameUI(gameUI);
     }
 });

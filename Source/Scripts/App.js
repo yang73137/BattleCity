@@ -19,13 +19,11 @@ App = {
         this.gameUI = new GameUI();
         this.gameUI.appendTo(this.container);
 
+        this.scoreUI = new ScoreUI();
+        this.scoreUI.appendTo(this.container);
+
         this.endingUI = new EndingUI();
         this.endingUI.appendTo(this.container);
-
-        this.tanks = [];
-
-        this.scenes = [this.openingUI, this.gameUI, this.endingUI];
-        this.scenesIndex = -1;
 
         this.mode = UIMode.Opening;
     },
@@ -40,24 +38,6 @@ App = {
 
         this.openingUI.enter();
         App.onTimer();
-        /*
-        this.openingUI.enter();
-        if (App.scenesIndex == -1) {
-            App.scenesIndex = 0;
-            App.scenes[0].enter();
-        }
-        var app = App;
-        setInterval(function () {
-
-            if (!app.scenes[app.scenesIndex].update()) {
-                app.scenes[app.scenesIndex].level();
-                app.scenesIndex++;
-                if (app.scenesIndex == app.scenes.length) {
-                    app.scenesIndex = 0;
-                }
-                app.scenes[app.scenesIndex].enter();
-            }
-        }, 16);*/
     },
     error: function (src, loaded, total) {
         alert("加载图片 " + src + " 出错");
@@ -69,9 +49,8 @@ App = {
         ImageLoader.load(this, ["../Images/Boom.png", "../Images/Frag.png", "../Images/Misc.png", "../Images/Tank.png", "../Images/Terr.png", "../Images/UI.png"]);
     },
     onTimer: function () {
-        
-        var app = App;
         setInterval(function () {
+            var app = App;
             switch (app.mode) {
                 case UIMode.Opening:
                     if (!app.openingUI.update()) {
@@ -83,6 +62,7 @@ App = {
                 case UIMode.Stage:
                     if (!app.stageUI.update()) {
                         app.stageUI.level();
+                        app.gameUI.setStage(app.stageUI.stage);
                         app.gameUI.enter();
                         app.mode = UIMode.Game;
                     }
@@ -90,17 +70,21 @@ App = {
                 case UIMode.Game:
                     if (!app.gameUI.update()) {
                         app.gameUI.level();
-                        app.mode = UIMode.Score;
+                        var scoreData = app.gameUI.getScoreData();
+                        app.scoreUI.setData(scoreData.stage, scoreData.player1Score, scoreData.enemy1Number, scoreData.enemy2Number, scoreData.enemy3Number, scoreData.enemy4Number);
                         app.scoreUI.enter();
+                        app.mode = UIMode.Score;
                     }
                     break;
                 case UIMode.Score:
                     if (!app.scoreUI.update()) {
                         app.scoreUI.level();
                         if (app.gameUI.isFailed()) {
-                            app.openingUI.enter();
+                            app.stageUI.setStageChangedEnabled(true);
+                            app.endingUI.enter();
                             app.mode = UIMode.Ending;
                         } else {
+                            app.gameUI.setStage(++app.gameUI.stage);
                             app.gameUI.enter();
                             app.mode = UIMode.Game;
                         }

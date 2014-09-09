@@ -9,7 +9,7 @@
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.setPosition(0, 0);
         this.setZ(Const.Z_UI);
-        this.setBackground("rgb(102,102,102)");
+        this.setBackground("#7F7F7F");
 
         this.stageLabel = new Label("STAGE  " + this.stage);
         this.stageLabel.setColor("#000");
@@ -18,8 +18,6 @@
         this.stageLabel.show();
 
         this.append(this.stageLabel);
-
-        
     },
     onEnter: function () {
         this.show();
@@ -36,6 +34,7 @@
                 this.setStage(--this.stage);
             }
             if (Input.isPressed(InputAction.START)) {
+                this.stageChangedEnabled = false;
                 return false;
             }
         }
@@ -58,6 +57,6 @@
             stage = 1;
         }
         this.stage = stage;
-        this.stageLabel.setText("STAGE   " + this.stage);
+        this.stageLabel.setText("STAGE  " + this.stage);
     }
 });

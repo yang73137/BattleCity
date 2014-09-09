@@ -9,6 +9,7 @@ var Const =
 	//
 	MAX_STAGE: 35,				// 总关数
 	MAX_TANK: 5,				// 最大坦克数
+	MAX_SCORE: 20000,
 
 	TIME_BULPRF_DEF: 180,		// 出生防弹时间
 	TIME_BULPRF_BONUS: 720,	// 奖励防弹时间
