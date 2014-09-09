@@ -168,6 +168,7 @@
     <Content Include="Scripts\UI\GameUI.js" />
     <Content Include="Scripts\UI\OpeningUI.js" />
     <Content Include="Scripts\UI\ScoreUI.js" />
+    <Content Include="Scripts\UI\StageUI.js" />
     <Content Include="Scripts\UI\UIBase.js" />
     <Content Include="Web.config" />
   </ItemGroup>

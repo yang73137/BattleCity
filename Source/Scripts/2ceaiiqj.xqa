@@ -37,8 +37,6 @@ App = {
     complete: function () {
 
         App.init();
-
-        this.openingUI.enter();
         App.onTimer();
         /*
         this.openingUI.enter();
@@ -69,7 +67,6 @@ App = {
         ImageLoader.load(this, ["../Images/Boom.png", "../Images/Frag.png", "../Images/Misc.png", "../Images/Tank.png", "../Images/Terr.png", "../Images/UI.png"]);
     },
     onTimer: function () {
-        
         var app = App;
         setInterval(function () {
             switch (app.mode) {

@@ -37,9 +37,8 @@ App = {
     complete: function () {
 
         App.init();
+        this.updateFrame();
 
-        this.openingUI.enter();
-        App.onTimer();
         /*
         this.openingUI.enter();
         if (App.scenesIndex == -1) {
@@ -68,9 +67,8 @@ App = {
     run: function () {
         ImageLoader.load(this, ["../Images/Boom.png", "../Images/Frag.png", "../Images/Misc.png", "../Images/Tank.png", "../Images/Terr.png", "../Images/UI.png"]);
     },
-    onTimer: function () {
-        
-        var app = App;
+    updateFrame: function () {
+        var app = this;
         setInterval(function () {
             switch (app.mode) {
                 case UIMode.Opening:

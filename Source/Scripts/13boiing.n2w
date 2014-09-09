@@ -37,8 +37,6 @@ App = {
     complete: function () {
 
         App.init();
-
-        this.openingUI.enter();
         App.onTimer();
         /*
         this.openingUI.enter();
@@ -71,7 +69,7 @@ App = {
     onTimer: function () {
         
         var app = App;
-        setInterval(function () {
+        setInterval(function () {console.log(App.mode);
             switch (app.mode) {
                 case UIMode.Opening:
                     if (!app.openingUI.update()) {

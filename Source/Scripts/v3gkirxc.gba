@@ -13,8 +13,7 @@ App = {
         this.openingUI = new OpeningUI();
         this.openingUI.appendTo(this.container);
 
-        this.stageUI = new StageUI();
-        this.stageUI.appendTo(this.container);
+        this.stageUI = null;
 
         this.gameUI = new GameUI();
         this.gameUI.appendTo(this.container);
@@ -38,9 +37,9 @@ App = {
 
         App.init();
 
-        this.openingUI.enter();
-        App.onTimer();
-        /*
+        //this.scoreUI = new ScoreUI();
+        //this.scenes = [this.scoreUI];
+        //this.scoreUI.appendTo(this.container);
         this.openingUI.enter();
         if (App.scenesIndex == -1) {
             App.scenesIndex = 0;
@@ -57,7 +56,8 @@ App = {
                 }
                 app.scenes[app.scenesIndex].enter();
             }
-        }, 16);*/
+            //app.scenes[app.scenesIndex].update();
+        }, 16);
     },
     error: function (src, loaded, total) {
         alert("加载图片 " + src + " 出错");
@@ -68,52 +68,51 @@ App = {
     run: function () {
         ImageLoader.load(this, ["../Images/Boom.png", "../Images/Frag.png", "../Images/Misc.png", "../Images/Tank.png", "../Images/Terr.png", "../Images/UI.png"]);
     },
-    onTimer: function () {
-        
-        var app = App;
+    updateFrame: function () {
         setInterval(function () {
-            switch (app.mode) {
+            switch (this.mode) {
                 case UIMode.Opening:
-                    if (!app.openingUI.update()) {
-                        app.openingUI.level();
-                        app.stageUI.enter();
-                        app.mode = UIMode.Stage;
+                    if (!this.openingUI.update()) {
+                        this.openingUI.level();
+                        this.stageUI.enter();
+                        this.mode = UIMode.Stage;
                     }
                     break;
                 case UIMode.Stage:
-                    if (!app.stageUI.update()) {
-                        app.stageUI.level();
-                        app.gameUI.enter();
-                        app.mode = UIMode.Game;
+                    if (!this.stageUI.update()) {
+                        this.stageUI.level();
+                        this.gameUI.enter();
+                        this.mode = UIMode.Game;
                     }
                     break;
                 case UIMode.Game:
-                    if (!app.gameUI.update()) {
-                        app.gameUI.level();
-                        app.mode = UIMode.Score;
-                        app.scoreUI.enter();
+                    if (!this.gameUI.update()) {
+                        this.gameUI.level();
+                        this.mode = UIMode.Score;
+                        this.scoreUI.enter();
                     }
                     break;
                 case UIMode.Score:
-                    if (!app.scoreUI.update()) {
-                        app.scoreUI.level();
-                        if (app.gameUI.isFailed()) {
-                            app.openingUI.enter();
-                            app.mode = UIMode.Ending;
+                    if (!this.scoreUI.update()) {
+                        this.scoreUI.level();
+                        if (this.gameUI.isFailed()) {
+                            this.openingUI.enter();
+                             this.mode = UIMode.Ending;
                         } else {
-                            app.gameUI.enter();
-                            app.mode = UIMode.Game;
+                            this.openingUI.enter();
+                            this.mode = UIMode.Ending;
                         }
+                       
                     }
                     break;
                 case UIMode.Ending:
-                    if (!app.endingUI.update()) {
-                        app.endingUI.level();
-                        app.openingUI.enter();
-                        app.mode = UIMode.Opening;
+                    if (!this.endingUI.update()) {
+                        this.endingUI.level();
+                        this.openingUI.enter();
+                        this.mode = UIMode.Opening;
                     }
                     break;
             }
-        }, 16);
+        });
     }
 };
