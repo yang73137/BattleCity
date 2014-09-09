@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>BattleCity</title>
+    <style>
+        * {
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .app {
+            margin-top: 50px;
+            width: 512px;
+            height: 448px;
+            position: relative;
+            background: #000000;
+            overflow: hidden;
+        }
+
+        .button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #000000;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body style="background: #ffffff;">
+    <div id="app" class="app"></div>
+    <div style="width: 512px; margin-top: 50px;">
+        <div style="float: left">
+            <input class="button" style="margin-left: 50px;" type="text" value="上" onfocus="Input.keyPress(InputAction.UP);" onblur="Input.keyRelease(InputAction.UP);" />
+            <br />
+            <br />
+            <input class="button" type="text" value="左" onfocus="Input.keyPress(InputAction.LEFT);" onblur="Input.keyRelease(InputAction.LEFT);" />
+            <input style="margin-left: 55px;" class="button" type="text" value="右" onfocus="Input.keyPress(InputAction.RIGHT);" onblur="Input.keyRelease(InputAction.RIGHT);" />
+            <br />
+            <br />
+            <input class="button" style="margin-left: 50px;" type="text" value="下" onfocus="Input.keyPress(InputAction.DOWN);" onblur="Input.keyRelease(InputAction.DOWN);" />
+        </div>
+        <div style="float: left; padding-top: 50px;">
+            <input class="button" style="width: 50px; margin-left: 30px;" type="text" value="开始" onfocus="Input.keyPress(InputAction.START);" onblur="Input.keyRelease(InputAction.START);" />
+            <input class="button" style="width: 50px; margin-left: 30px;" type="text" value="选择" onfocus="Input.keyPress(InputAction.SELECT);" onblur="Input.keyRelease(InputAction.SELECT);" />
+        </div>
+        <div style="float: left; padding-top: 50px;">
+            <input class="button" style="margin-left: 30px;" type="text" value="A" onfocus="Input.keyPress(InputAction.GAME_A);" onblur="Input.keyRelease(InputAction.GAME_A);" />
+            <input class="button" style="margin-left: 30px;" type="text" value="B" onfocus="Input.keyPress(InputAction.GAME_B);" onblur="Input.keyRelease(InputAction.GAME_B);" />
+        </div>
+    </div>
+
+    <script src="./Scripts/Basic/Const.js"></script>
+    <script src="./Scripts/Basic/Counter.js"></script>
+    <script src="./Scripts/Basic/ImgLoader.js"></script>
+    <script src="./Scripts/Basic/Input.js"></script>
+    <script src="./Scripts/Basic/ClassFactory.js"></script>
+
+
+    <script src="./Scripts/Basic/Layer.js"></script>
+    <script src="./Scripts/Basic/TileLayer.js"></script>
+    <script src="./Scripts/Basic/Label.js"></script>
+    <script src="./Scripts/Basic/Sprite.js"></script>
+
+    <script src="./Scripts/Object/GameObject.js"></script>
+    <script src="./Scripts/Object/Bonus.js"></script>
+    <script src="./Scripts/Object/Block.js"></script>
+    <script src="./Scripts/Object/Bomb.js"></script>
+    <script src="./Scripts/Object/Bullet.js"></script>
+    <script src="./Scripts/Object/Tank.js"></script>
+
+    <script src="./Scripts/Map.js"></script>
+
+    <script src="./Scripts/UI/UIBase.js"></script>
+    <script src="./Scripts/UI/OpeningUI.js"></script>
+    <script src="./Scripts/UI/StageUI.js"></script>
+    <script src="./Scripts/UI/ScoreUI.js"></script>
+    <script src="./Scripts/UI/GameUI.js"></script>
+    <script src="./Scripts/UI/EndingUI.js"></script>
+
+    <script src="./Scripts/App.js"></script>
+
+    <script type="text/javascript">
+        App.run();
+    </script>
+
+</body>
+</html>

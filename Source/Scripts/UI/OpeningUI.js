@@ -2,6 +2,10 @@
     init: function () {
         UIBase.init.call(this);
 
+        this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
+        this.setBackground("#000000");
+        this.setPosition(0, 0);
+
         // logo
         this.logo = new Layer();
         this.logo.setSize(376, 160);
@@ -26,9 +30,6 @@
 
         this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
         this.start = false;
-
-        // 添加到App
-        this.appendTo(App.container);
     },
     onEnter: function () {
         this.sprite.start();

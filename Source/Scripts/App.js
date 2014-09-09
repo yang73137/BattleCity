@@ -46,7 +46,7 @@ App = {
         */
     },
     run: function () {
-        ImageLoader.load(this, ["../Images/Boom.png", "../Images/Frag.png", "../Images/Misc.png", "../Images/Tank.png", "../Images/Terr.png", "../Images/UI.png"]);
+        ImageLoader.load(this, [Const.IMAGE_BOOM.src, Const.IMAGE_MISC.src, Const.IMAGE_TANK.src, Const.IMAGE_TERR.src, Const.IMAGE_UI.src]);
     },
     onTimer: function () {
         setInterval(function () {

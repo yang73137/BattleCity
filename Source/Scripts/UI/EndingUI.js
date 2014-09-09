@@ -2,6 +2,10 @@
     init: function() {
         UIBase.init.call(this);
 
+        this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
+        this.setBackground("#000000");
+        this.setPosition(0, 0);
+
         // game over logo
         this.logo = new Layer();
         this.logo.setSize(250, 160);
@@ -9,9 +13,6 @@
         this.logo.setBackground("url(" + Const.IMAGE_UI.src + ") no-repeat 0 -160px");
         this.logo.show();
         this.append(this.logo);
-
-        this.setSize(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
-        this.setPosition(0, 0);
 
         this.counter = new Counter(180, false, true);
     },
