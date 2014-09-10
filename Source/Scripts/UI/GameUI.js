@@ -94,7 +94,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         // 玩家生命
         this.playerLabel = this.lifeLabel = new Label("IP");
         this.playerLabel.setColor("#000");
-        this.playerLabel.setCSS({ font: "22px 'Arial Black'" });
+        this.playerLabel.setCSS({ "font-size": "22px" });
         this.playerLabel.setPosition(15, 240);
         this.playerLabel.show();
         this.statusArea.append(this.playerLabel);
@@ -108,7 +108,7 @@ GameUI = ClassFactory.createClass(UIBase, {
 
         this.lifeLabel = new Label("");
         this.lifeLabel.setColor("#000");
-        this.lifeLabel.setCSS({ font: "19px 'Arial Black'" });
+        this.lifeLabel.setCSS({ "font-size": "19px" });
         this.lifeLabel.setPosition(35, 263);
         this.lifeLabel.show();
         this.statusArea.append(this.lifeLabel);
@@ -123,7 +123,7 @@ GameUI = ClassFactory.createClass(UIBase, {
 
         this.stageLabel = new Label();
         this.stageLabel.setColor("#000");
-        this.stageLabel.setCSS({ font: "19px 'Arial Black'" });
+        this.stageLabel.setCSS({ "font-size": "19px" });
         this.stageLabel.setPosition(25, 375);
         this.stageLabel.show();
         this.statusArea.append(this.stageLabel);

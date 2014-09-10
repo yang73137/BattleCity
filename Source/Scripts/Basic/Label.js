@@ -1,7 +1,7 @@
 ﻿Label = ClassFactory.createClass(Layer, {
     init: function (text) {
         Layer.init.call(this);
-        this.style.font = "22px 'Arial Black'";
+        this.style.font = "22px 'Meiryo'";
         this.setText(text);
     },
     setColor: function (color) {
