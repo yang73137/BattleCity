@@ -206,14 +206,21 @@
         this.stageLabel.setText("STAGE     " + this.stage);
         this.enemy1NumberLabel.setText(0);
         this.enemy1NumberIndex = 0;
+        
         this.enemy1ScoreLabel.setText("0  PTS");
         this.enemy2NumberLabel.setText(0);
         this.enemy2ScoreLabel.setText("0  PTS");
+        this.enemy2NumberIndex = 0;
+
         this.enemy3NumberLabel.setText(0);
         this.enemy3ScoreLabel.setText("0  PTS");
+        this.enemy3NumberIndex = 0;
+
         this.enemy4NumberLabel.setText(0);
         this.enemy4ScoreLabel.setText("0  PTS");
         this.totalNumberLabel.setText(0);
+        this.enemy4NumberIndex = 0;
+
 
         this.show();
     },
