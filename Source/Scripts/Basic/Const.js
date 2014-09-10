@@ -70,11 +70,11 @@ var Const =
 	DIRECTION_DOWN: 2,
 	DIRECTION_LEFT: 3,
 
-	IMAGE_TANK: { src: "./Images/Tank.png", width: 4064, height: 32 },
-    IMAGE_BOOM: { src: "./Images/Boom.png", width: 320, height: 64 },
-    IMAGE_MISC: { src: "./Images/Misc.png", width: 160, height: 32 },
-    IMAGE_UI: { src: "./Images/UI.png", width: 376, height: 320 },
-    IMAGE_TERR: { src: "./Images/Terr.png", width: 1152, height: 32 },
+	IMAGE_TANK: { src: (window.release ? "" : ".") + "./Images/Tank.png", width: 4064, height: 32 },
+	IMAGE_BOOM: { src: (window.release ? "" : ".") + "./Images/Boom.png", width: 320, height: 64 },
+	IMAGE_MISC: { src: (window.release ? "" : ".") + "./Images/Misc.png", width: 160, height: 32 },
+	IMAGE_UI: { src: (window.release ? "" : ".") + "./Images/UI.png", width: 376, height: 320 },
+	IMAGE_TERR: { src: (window.release ? "" : ".") + "./Images/Terr.png", width: 1152, height: 32 },
 
 
     SCREEN_WIDTH: 512,
