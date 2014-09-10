@@ -88,12 +88,14 @@ Input = function () {
          * 检测指定的键是否按下
          */
         isPressed: function(key) {
-            if (!arrPress[key])
+            if (!arrPress[key]) {
                 return false;
+            }
 
             var iTime = +new Date();
-            if (iTime - arrQuery[key] < arrRepeat[key])
+            if (iTime - arrQuery[key] < arrRepeat[key]) {
                 return false;
+            }
 
             arrQuery[key] = iTime;
             return true;
