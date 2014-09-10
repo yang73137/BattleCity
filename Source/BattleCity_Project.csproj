@@ -104,7 +104,7 @@
     <Content Include="UI\ScoreUI.html" />
     <Content Include="UI\StageUI.html" />
     <Content Include="UI\Test.html" />
-    <Content Include="App.html" />
+    <Content Include="Index.html" />
     <Content Include="Scripts\App.js" />
     <Content Include="Scripts\Basic\ClassFactory.js" />
     <Content Include="Scripts\Basic\Const.js" />
