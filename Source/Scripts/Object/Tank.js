@@ -56,6 +56,10 @@ Tank = ClassFactory.createClass(GameObject, {
         
         // 得分计数器
         this.scoreCounter = new Counter(30, false, true);
+
+        this.onIce = false;
+        this.iceCounter = new Counter(15, false, true);
+        this.moving = false;
     },
     setType: function (type) {
         this.type = type;
@@ -97,7 +101,7 @@ Tank = ClassFactory.createClass(GameObject, {
         }
     },
     move: function () {
-
+        this.onIce = false;
         if (this.direction == Const.DIRECTION_UP) {
             this.sprite.setY(Math.max(this.sprite.y - this.speed, 0));
         }
@@ -203,27 +207,7 @@ Tank = ClassFactory.createClass(GameObject, {
         var block3 = (x3 >= 0 && y3 >= 0 && x3 < 26 && y3 < 26) ? this.gameUI.block16x16[x3][y3] : null;
         
         if (block1 && block1.typeId == BlockTypeId.Ice || block2 && block2.typeId == BlockTypeId.Ice) {
-            if (this.direction == Const.DIRECTION_UP) {
-                this.sprite.setY(Math.max(this.sprite.y - 1, 0));
-            }
-            else if (this.direction == Const.DIRECTION_RIGHT) {
-                if (this.sprite.x + this.sprite.width + 1 <= this.gameUI.gameArea.width) {
-                    this.sprite.setX(this.sprite.x + 1);
-                }
-                else {
-                    this.sprite.setX(416 - this.sprite.width);
-                }
-            }
-            else if (this.direction == Const.DIRECTION_DOWN) {
-                if (this.sprite.y + this.sprite.height + 1 <= this.gameUI.gameArea.height) {
-                    this.sprite.setY(this.sprite.y + 1);
-                } else {
-                    this.sprite.setY(416 - this.sprite.height);
-                }
-            }
-            else if (this.direction == Const.DIRECTION_LEFT) {
-                this.sprite.setX(Math.max(this.sprite.x - 1, 0));
-            }
+            this.onIce = true;
         }
 
         if ((block1 && block1.typeId != BlockTypeId.Grass && block1.typeId != BlockTypeId.Ice) || (block2 && block2.typeId != BlockTypeId.Grass && block2.typeId != BlockTypeId.Ice) || (block3 && block3.typeId != BlockTypeId.Grass && block3.typeId != BlockTypeId.Ice)) {
@@ -371,6 +355,7 @@ PlayerTank = ClassFactory.createClass(Tank, {
         this.bulletProofSprite.start();
     },
     onLive: function () {
+
         Tank.prototype.onLive.call(this);
 
         if (this.bulletProofTime-- > 0) {
@@ -388,23 +373,6 @@ PlayerTank = ClassFactory.createClass(Tank, {
         if (this.gameUI.baseDestoryed) {
             return;
         }
-        
-        if (Input.isPressed(InputAction.UP)) {
-            this.direction = Const.DIRECTION_UP;
-            this.move();
-        }
-        else if (Input.isPressed(InputAction.RIGHT)) {
-            this.direction = Const.DIRECTION_RIGHT;
-            this.move();
-        }
-        else if (Input.isPressed(InputAction.DOWN)) {
-            this.direction = Const.DIRECTION_DOWN;
-            this.move();
-        }
-        else if (Input.isPressed(InputAction.LEFT)) {
-            this.direction = Const.DIRECTION_LEFT;
-            this.move();
-        }
 
         if (this.fireCounter.enabled && !this.fireCounter.countdown()) {
             this.fireCounter.setEnabled(false);
@@ -415,6 +383,40 @@ PlayerTank = ClassFactory.createClass(Tank, {
                 this.fireCounter.setEnabled(true);
                 this.fire();
             }
+        }
+
+        if (this.onIce && this.moving) {
+            if (this.iceCounter.countdown()) {
+                this.move();
+                return;
+            } else {
+                this.move();
+                this.moving = false;
+            }
+        }
+        
+        if (Input.isPressed(InputAction.UP)) {
+            this.direction = Const.DIRECTION_UP;
+            this.moving = true;
+            this.move();
+        }
+        else if (Input.isPressed(InputAction.RIGHT)) {
+            this.direction = Const.DIRECTION_RIGHT;
+            this.moving = true;
+            this.move();
+        }
+        else if (Input.isPressed(InputAction.DOWN)) {
+            this.direction = Const.DIRECTION_DOWN;
+            this.moving = true;
+            this.move();
+        }
+        else if (Input.isPressed(InputAction.LEFT)) {
+            this.direction = Const.DIRECTION_LEFT;
+            this.moving = true;
+            this.move();
+        }
+        else {
+            this.moving = false;
         }
     },
     levelUp: function () {
