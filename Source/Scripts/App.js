@@ -80,6 +80,7 @@ App = {
                     if (!app.scoreUI.update()) {
                         app.scoreUI.level();
                         if (app.gameUI.isFailed()) {
+                            app.stageUI.setStage(1);
                             app.stageUI.setStageChangedEnabled(true);
                             app.endingUI.enter();
                             app.mode = UIMode.Ending;
