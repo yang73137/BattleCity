@@ -84,9 +84,9 @@ App = {
                             app.endingUI.enter();
                             app.mode = UIMode.Ending;
                         } else {
-                            app.gameUI.setStage(++app.gameUI.stage);
-                            app.gameUI.enter();
-                            app.mode = UIMode.Game;
+                            app.stageUI.setStage(++app.stageUI.stage);
+                            app.stageUI.enter();
+                            app.mode = UIMode.Stage;
                         }
                     }
                     break;
