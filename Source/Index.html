@@ -69,36 +69,46 @@
         window.release = true;
 
         var up = new Hammer(document.getElementById("up"));
-        console.log(up);
-        var upPress = up.get("press");
-        upPress.set({ time: 0 });
+        up.get("press").set({ time: 0 });
         up.on("press", function () { Input.keyPress(InputAction.UP); });
-
-        /*
-        var up = new Hammer(document.getElementById("up"), { time: 0 });
-        up.on("press", function () { alert(1); Input.keyPress(InputAction.UP); }, { time: 0});
-        up.on("release", function () { alert(2); Input.keyRelease(InputAction.UP); });
-        */
-        var left = new Hammer(document.getElementById("left"));
-        left.on("tap press", function () { Input.keyPress(InputAction.LEFT); });
+        up.on("pressup", function () {
+            console.log(1);Input.keyRelease(InputAction.UP); });
 
         var right = new Hammer(document.getElementById("right"));
-        right.on("tap press", function () { Input.keyPress(InputAction.RIGHT); });
+        right.get("press").set({ time: 0 });
+        right.on("press", function () { Input.keyPress(InputAction.RIGHT); });
+        right.on("pressup", function () { Input.keyRelease(InputAction.RIGHT); });
+
+        var left = new Hammer(document.getElementById("left"));
+        left.get("press").set({ time: 0 });
+        left.on("press", function () { Input.keyPress(InputAction.LEFT); });
+        left.on("pressup", function () { Input.keyRelease(InputAction.LEFT); });
 
         var down = new Hammer(document.getElementById("down"));
-        down.on("tap press", function () { Input.keyPress(InputAction.DOWN); });
+        down.get("press").set({ time: 0 });
+        down.on("press", function () { Input.keyPress(InputAction.DOWN); });
+        down.on("pressup", function () { Input.keyRelease(InputAction.DOWN); });
 
         var start = new Hammer(document.getElementById("start"));
-        start.on("tap press", function () { Input.keyPress(InputAction.START); });
+        start.get("press").set({ time: 0 });
+        start.on("press", function () { Input.keyPress(InputAction.START); });
+        start.on("pressup", function () { Input.keyRelease(InputAction.START); });
 
         var select = new Hammer(document.getElementById("select"));
-        select.on("tap press", function () { Input.keyPress(InputAction.SELECT); });
+        select.get("press").set({ time: 0 });
+        select.on("press", function () { Input.keyPress(InputAction.SELECT); });
+        select.on("pressup", function () { Input.keyRelease(InputAction.SELECT); });
 
         var a = new Hammer(document.getElementById("a"));
-        a.on("tap press", function () { Input.keyPress(InputAction.GAME_A); });
+        a.get("press").set({ time: 0 });
+        a.on("press", function () { Input.keyPress(InputAction.GAME_A); });
+        a.on("pressup", function () { Input.keyRelease(InputAction.GAME_A); });
 
         var b = new Hammer(document.getElementById("b"));
-        b.on("tap press", function () { Input.keyPress(InputAction.GAME_B); });
+        b.get("press").set({ time: 0 });
+        b.on("press", function () { Input.keyPress(InputAction.GAME_B); });
+        b.on("pressup", function () { Input.keyRelease(InputAction.GAME_B); });
+
     </script>
 
     <script src="./Scripts/Basic/Const.js"></script>
