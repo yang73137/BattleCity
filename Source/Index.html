@@ -1,35 +1,36 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>BattleCity</title>
-    <style>
-        * {
-            margin: 0 auto;
-            padding: 0;
-        }
+    <head>
+        <meta content="width=device-width,user-scalable=no" name="viewport"/>
+        <title>BattleCity</title>
+        <style>
+            * {
+                margin: 0 auto;
+                padding: 0;
+            }
 
-        .app {
-            margin-top: 50px;
-            width: 512px;
-            height: 448px;
-            position: relative;
-            background: #000000;
-            overflow: hidden;
-        }
+            .app {
+                margin-top: 50px;
+                width: 512px;
+                height: 448px;
+                position: relative;
+                background: #000000;
+                overflow: hidden;
+            }
 
-        .button {
-            width: 64px;
-            height: 64px;
-            border: none;
-            background: #000000;
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            vertical-align: middle;
-        }
-    </style>
-</head>
+            .button {
+                width: 64px;
+                height: 64px;
+                border: none;
+                background: #000000;
+                color: #ffffff;
+                font-size: 20px;
+                font-weight: bold;
+                text-align: center;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
 <body style="background: #ffffff;">
     <div style="width: 550px; margin-top: 20px;">
         <span>上：w</span>
@@ -63,7 +64,7 @@
         </div>
     </div>
 
-    <script src="./Scripts/Hammer/hammer.min.js"></script>
+    <script src="./Scripts/Hammer/hammer.js"></script>
 
     <script type="text/javascript">
         window.release = true;
@@ -71,8 +72,7 @@
         var up = new Hammer(document.getElementById("up"));
         up.get("press").set({ time: 0 });
         up.on("press", function () { Input.keyPress(InputAction.UP); });
-        up.on("pressup", function () {
-            console.log(1);Input.keyRelease(InputAction.UP); });
+        up.on("pressup", function () { Input.keyRelease(InputAction.UP); });
 
         var right = new Hammer(document.getElementById("right"));
         right.get("press").set({ time: 0 });
