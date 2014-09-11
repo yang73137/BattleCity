@@ -65,6 +65,7 @@ GameUI = ClassFactory.createClass(UIBase, {
         // 暂停标签
         this.pauseLabel = new Label("PAUSE");
         this.pauseLabel.setColor("#E05000");
+        this.pauseLabel.setZ(Const.Z_UI);
         this.pauseLabel.moveTo(196, 220);
         this.pauseLabel.hide();
         this.append(this.pauseLabel);

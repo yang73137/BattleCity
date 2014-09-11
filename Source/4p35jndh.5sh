@@ -44,7 +44,7 @@
     <div id="app" class="app"></div>
     <div style="width: 512px; margin-top: 50px;">
         <div style="float: left">
-            <input id="up" class="button" style="margin-left: 50px;" type="button" value="上" />
+            <input id="up" class="button" style="margin-left: 50px;" type="button" value="" />
             <br />
             <br />
             <input id="left" class="button" type="button" value="左" />
