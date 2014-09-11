@@ -102,6 +102,10 @@ Tank = ClassFactory.createClass(GameObject, {
     },
     move: function () {
         this.onIce = false;
+        
+        var oldX = this.sprite.x;
+        var oldY = this.sprite.y;
+        
         if (this.direction == Const.DIRECTION_UP) {
             this.sprite.setY(Math.max(this.sprite.y - this.speed, 0));
         }
@@ -125,10 +129,8 @@ Tank = ClassFactory.createClass(GameObject, {
         }
 
         this.wheel = +!this.wheel;
-        var oldX = this.sprite.x;
-        var oldY = this.sprite.y;
         
-
+        
         //检测和其他坦克碰撞
         for (var j = 0; j < this.gameUI.tanks.length; j++) {
             var tank = this.gameUI.tanks[j];
@@ -146,6 +148,8 @@ Tank = ClassFactory.createClass(GameObject, {
                 } else if (this.direction == Const.DIRECTION_LEFT && this.sprite.x - tank.sprite.x >= (this.sprite.width - this.speed)) {
                     this.sprite.setX(tank.sprite.x + tank.sprite.width);
                 }
+                
+                break;
             }
         }
 
@@ -206,15 +210,27 @@ Tank = ClassFactory.createClass(GameObject, {
         var block2 = (x2 >= 0 && y2 >= 0 && x2 < 26 && y2 < 26) ? this.gameUI.block16x16[x2][y2] : null;
         var block3 = (x3 >= 0 && y3 >= 0 && x3 < 26 && y3 < 26) ? this.gameUI.block16x16[x3][y3] : null;
         
-        if (block1 && block1.typeId == BlockTypeId.Ice || block2 && block2.typeId == BlockTypeId.Ice) {
+        if (block1 && block1.typeId == BlockTypeId.Ice || block2 && block2.typeId == BlockTypeId.Ice || block3 && block3.typeId == BlockTypeId.Ice) {
             this.onIce = true;
         }
 
         if ((block1 && block1.typeId != BlockTypeId.Grass && block1.typeId != BlockTypeId.Ice) || (block2 && block2.typeId != BlockTypeId.Grass && block2.typeId != BlockTypeId.Ice) || (block3 && block3.typeId != BlockTypeId.Grass && block3.typeId != BlockTypeId.Ice)) {
+            //检测和其他坦克碰撞
             this.sprite.setX(Math.round(oldX / 16) * 16);
             this.sprite.setY(Math.round(oldY / 16) * 16);
+            for (var j = 0; j < this.gameUI.tanks.length; j++) {
+                var tank = this.gameUI.tanks[j];
+
+                if (this == tank || tank.state != TankState.LIVE) {
+                    continue;
+                }
+                if (this.sprite.collidesWith(tank.sprite)) {
+                    this.sprite.setX(oldX);
+                    this.sprite.setY(oldY);
+                    break;
+                }
+            }
         }
-     
 
         // 检测Bonus
         if (this.team == 0 && this.sprite.collidesWith(this.gameUI.bonus.sprite) && this.gameUI.bonus.flashCounter.enabled) {
@@ -535,7 +551,7 @@ EnemyTank = ClassFactory.createClass(Tank, {
         else {
             this.sprite.setVisible(true);
         }
-        
+        /*
         // 一段时间后改变移动方向
         if (!this.moveCounter.countdown()) {
             var direction = Math.round(Math.random() * 3);
@@ -551,7 +567,7 @@ EnemyTank = ClassFactory.createClass(Tank, {
                 this.fire();
                 this.fireCounter.setEnabled(true);
             }
-        }
+        }*/
     },
     hit: function () {
         if (this.state == TankState.LIVE) {
