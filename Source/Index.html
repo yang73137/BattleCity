@@ -30,76 +30,110 @@
         }
     </style>
 </head>
-    <body style="background: #ffffff;">
-        <div style="width: 550px; margin-top: 20px;">
-            <span>上：w</span>
-            <span>右：d</span>
-            <span>下：s</span>
-            <span>左：a</span>
-            <span>开始：enter</span>
-            <span>开火：j</span>
-            <span>连发：u</span>
-            <span>作弊：ctrl + m</span>
+<body style="background: #ffffff;">
+    <div style="width: 550px; margin-top: 20px;">
+        <span>上：w</span>
+        <span>右：d</span>
+        <span>下：s</span>
+        <span>左：a</span>
+        <span>开始：enter</span>
+        <span>开火：j</span>
+        <span>连发：u</span>
+        <span>作弊：ctrl + m</span>
+    </div>
+    <div id="app" class="app"></div>
+    <div style="width: 512px; margin-top: 50px;">
+        <div style="float: left">
+            <input id="up" class="button" style="margin-left: 50px;" type="button" value="上" />
+            <br />
+            <br />
+            <input id="left" class="button" type="button" value="左" />
+            <input id="right" style="margin-left: 55px;" class="button" type="button" value="右" />
+            <br />
+            <br />
+            <input id="down" class="button" style="margin-left: 50px;" type="button" value="下" />
         </div>
-        <div id="app" class="app"></div>
-        <div style="width: 512px; margin-top: 50px;">
-            <div style="float: left">
-                <input class="button" style="margin-left: 50px;" type="button" value="上" ontouchstart="Input.keyPress(InputAction.UP);" ontouchend="Input.keyRelease(InputAction.UP);" />
-                <br />
-                <br />
-                <input class="button" type="button" value="左" onmousedown="Input.keyPress(InputAction.LEFT);" ontouchend="Input.keyRelease(InputAction.LEFT);" />
-                <input style="margin-left: 55px;" class="button" type="button" value="右" ontouchstart="Input.keyPress(InputAction.RIGHT);" ontouchend="Input.keyRelease(InputAction.RIGHT);" />
-                <br />
-                <br />
-                <input class="button" style="margin-left: 50px;" type="button" value="下" ontouchstart="Input.keyPress(InputAction.DOWN);" ontouchend="Input.keyRelease(InputAction.DOWN);" />
-            </div>
-            <div style="float: left; padding-top: 50px;">
-                <input class="button" style="width: 50px; margin-left: 30px;" type="button" value="开始" ontouchstart="Input.keyPress(InputAction.START);" ontouchend="Input.keyRelease(InputAction.START);" />
-                <input class="button" style="width: 50px; margin-left: 30px;" type="button" value="选择" ontouchstart="Input.keyPress(InputAction.SELECT);" ontouchend="Input.keyRelease(InputAction.SELECT);" />
-            </div>
-            <div style="float: left; padding-top: 50px;">
-                <input class="button" style="margin-left: 30px;" type="button" value="A" ontouchstart="Input.keyPress(InputAction.GAME_A);" ontouchend="Input.keyRelease(InputAction.GAME_A);" />
-                <input class="button" style="margin-left: 30px;" type="button" value="B" ontouchstart="Input.keyPress(InputAction.GAME_B);" ontouchend="Input.keyRelease(InputAction.GAME_B);" />
-            </div>
+        <div style="float: left; padding-top: 50px;">
+            <input id="start" class="button" style="width: 50px; margin-left: 30px;" type="button" value="开始" />
+            <input id="select" class="button" style="width: 50px; margin-left: 30px;" type="button" value="选择" />
         </div>
-        
-        <script type="text/javascript">
-            window.release = true;
-        </script>
+        <div style="float: left; padding-top: 50px;">
+            <input id="a" class="button" style="margin-left: 30px;" type="button" value="A" />
+            <input id="b" class="button" style="margin-left: 30px;" type="button" value="B" />
+        </div>
+    </div>
 
-        <script src="./Scripts/Basic/Const.js"></script>
-        <script src="./Scripts/Basic/Counter.js"></script>
-        <script src="./Scripts/Basic/ImgLoader.js"></script>
-        <script src="./Scripts/Basic/Input.js"></script>
-        <script src="./Scripts/Basic/ClassFactory.js"></script>
+    <script src="./Scripts/Hammer/hammer.min.js"></script>
+
+    <script type="text/javascript">
+        window.release = true;
+
+        var up = new Hammer(document.getElementById("up"));
+        console.log(up);
+        var upPress = up.get("press");
+        upPress.set({ time: 0 });
+        up.on("press", function () { Input.keyPress(InputAction.UP); });
+
+        /*
+        var up = new Hammer(document.getElementById("up"), { time: 0 });
+        up.on("press", function () { alert(1); Input.keyPress(InputAction.UP); }, { time: 0});
+        up.on("release", function () { alert(2); Input.keyRelease(InputAction.UP); });
+        */
+        var left = new Hammer(document.getElementById("left"));
+        left.on("tap press", function () { Input.keyPress(InputAction.LEFT); });
+
+        var right = new Hammer(document.getElementById("right"));
+        right.on("tap press", function () { Input.keyPress(InputAction.RIGHT); });
+
+        var down = new Hammer(document.getElementById("down"));
+        down.on("tap press", function () { Input.keyPress(InputAction.DOWN); });
+
+        var start = new Hammer(document.getElementById("start"));
+        start.on("tap press", function () { Input.keyPress(InputAction.START); });
+
+        var select = new Hammer(document.getElementById("select"));
+        select.on("tap press", function () { Input.keyPress(InputAction.SELECT); });
+
+        var a = new Hammer(document.getElementById("a"));
+        a.on("tap press", function () { Input.keyPress(InputAction.GAME_A); });
+
+        var b = new Hammer(document.getElementById("b"));
+        b.on("tap press", function () { Input.keyPress(InputAction.GAME_B); });
+    </script>
+
+    <script src="./Scripts/Basic/Const.js"></script>
+    <script src="./Scripts/Basic/Counter.js"></script>
+    <script src="./Scripts/Basic/ImgLoader.js"></script>
+    <script src="./Scripts/Basic/Input.js"></script>
+    <script src="./Scripts/Basic/ClassFactory.js"></script>
 
 
-        <script src="./Scripts/Basic/Layer.js"></script>
-        <script src="./Scripts/Basic/TileLayer.js"></script>
-        <script src="./Scripts/Basic/Label.js"></script>
-        <script src="./Scripts/Basic/Sprite.js"></script>
+    <script src="./Scripts/Basic/Layer.js"></script>
+    <script src="./Scripts/Basic/TileLayer.js"></script>
+    <script src="./Scripts/Basic/Label.js"></script>
+    <script src="./Scripts/Basic/Sprite.js"></script>
 
-        <script src="./Scripts/Object/GameObject.js"></script>
-        <script src="./Scripts/Object/Bonus.js"></script>
-        <script src="./Scripts/Object/Block.js"></script>
-        <script src="./Scripts/Object/Bomb.js"></script>
-        <script src="./Scripts/Object/Bullet.js"></script>
-        <script src="./Scripts/Object/Tank.js"></script>
+    <script src="./Scripts/Object/GameObject.js"></script>
+    <script src="./Scripts/Object/Bonus.js"></script>
+    <script src="./Scripts/Object/Block.js"></script>
+    <script src="./Scripts/Object/Bomb.js"></script>
+    <script src="./Scripts/Object/Bullet.js"></script>
+    <script src="./Scripts/Object/Tank.js"></script>
 
-        <script src="./Scripts/Map.js"></script>
+    <script src="./Scripts/Map.js"></script>
 
-        <script src="./Scripts/UI/UIBase.js"></script>
-        <script src="./Scripts/UI/OpeningUI.js"></script>
-        <script src="./Scripts/UI/StageUI.js"></script>
-        <script src="./Scripts/UI/ScoreUI.js"></script>
-        <script src="./Scripts/UI/GameUI.js"></script>
-        <script src="./Scripts/UI/EndingUI.js"></script>
+    <script src="./Scripts/UI/UIBase.js"></script>
+    <script src="./Scripts/UI/OpeningUI.js"></script>
+    <script src="./Scripts/UI/StageUI.js"></script>
+    <script src="./Scripts/UI/ScoreUI.js"></script>
+    <script src="./Scripts/UI/GameUI.js"></script>
+    <script src="./Scripts/UI/EndingUI.js"></script>
 
-        <script src="./Scripts/App.js"></script>
+    <script src="./Scripts/App.js"></script>
 
-        <script type="text/javascript">
-            App.run();
-        </script>
+    <script type="text/javascript">
+        App.run();
+    </script>
 
-    </body>
+</body>
 </html>
